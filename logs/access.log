@@ -36,3 +36,8 @@
 ::1 - - [20/Nov/2024:09:11:49 +0000] "GET / HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 ::1 - - [20/Nov/2024:09:11:49 +0000] "GET /styles.css HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 ::1 - - [20/Nov/2024:09:11:49 +0000] "GET /app.js HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+::1 - - [20/Nov/2024:11:29:27 +0000] "GET /signup.html HTTP/1.1" 200 2472 "http://localhost:3000/login.html?" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+::1 - - [20/Nov/2024:11:29:27 +0000] "GET /styles.css HTTP/1.1" 304 - "http://localhost:3000/signup.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+::1 - - [20/Nov/2024:11:29:27 +0000] "GET /app.js HTTP/1.1" 200 1988 "http://localhost:3000/signup.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+::1 - - [20/Nov/2024:11:29:48 +0000] "POST /api/auth/register HTTP/1.1" 201 42 "-" "PostmanRuntime/7.42.0"
+::1 - - [20/Nov/2024:11:30:02 +0000] "POST /api/auth/login HTTP/1.1" 200 202 "-" "PostmanRuntime/7.42.0"
