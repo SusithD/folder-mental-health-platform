@@ -128,3 +128,20 @@ body {
         width: 100%;
     }
 }
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
+    visibility: visible;
+}
+
+
+.signup-form input:valid {
+    border-color: #2c6739; /* Green border when valid */
+}
+
+
+
+
