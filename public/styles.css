@@ -1,0 +1,130 @@
+/* styles.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    background:#2c2c2c;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+.signup-container {
+    margin-top: 60px;
+    margin-bottom: 60px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 100%;
+    animation: fadeIn 1s ease-in-out;
+    box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2c2c2c;
+    text-align: center;
+}
+
+.form-header p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.form-column {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.signup-form .form-group {
+    margin: 0;
+}
+
+.signup-form input,
+.signup-form select {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+.signup-form input:focus,
+.signup-form select:focus {
+    border-color: #2c6739;
+    box-shadow: 0 0 4px rgba(249, 168, 38, 0.5);
+}
+
+.signup-form label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #444;
+}
+
+.signup-form button {
+    background: #2c6739;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    align-self: center;
+    max-width: 500px;
+}
+
+.signup-form button:hover {
+    background: #2c6739;
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .form-column {
+        width: 100%;
+    }
+}
