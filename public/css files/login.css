@@ -1,7 +1,7 @@
 /* General body styling */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f4f6f9;
+    background-color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,7 +32,9 @@ body {
     text-align: center;
     font-size: 24px;
     color: #333;
+    font-size: 1.8rem;
     margin-bottom: 20px;
+    font-weight: 600;
 }
 
 /* Form Group Styling */
@@ -79,7 +81,7 @@ input[type="password"]:focus {
 button[type="submit"] {
     width: 100%;
     padding: 12px;
-    background-color: #F9A826;
+    background-color: #188c7e;
     color: white;
     border: none;
     border-radius: 5px;
@@ -89,7 +91,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #e68919;
+    background-color: #188c7e;
 }
 
 /* Links Styling */
@@ -100,8 +102,8 @@ button[type="submit"]:hover {
 
 .links a {
     text-decoration: none;
-    color: #F9A826;
-    font-weight: bold;
+    color: #2c2c2c;
+    font-weight: 500;
 }
 
 .links p {

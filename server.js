@@ -6,6 +6,7 @@ const fs = require('fs');
 const morgan = require('morgan');
 const authRoutes = require('./routes/auth');
 
+
 // Load environment variables
 dotenv.config();
 

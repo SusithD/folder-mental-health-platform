@@ -45,7 +45,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         if (response.ok) {
             alert('Login successful');
             localStorage.setItem('authToken', data.token);
-            window.location.href = 'dashboard.html';
+            window.location.href = 'index.html';
         } else {
             alert(data.message || 'An error occurred.');
         }

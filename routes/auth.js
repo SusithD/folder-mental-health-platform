@@ -50,45 +50,112 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  // Check if the user exists in the database
-  const findUserQuery = 'SELECT * FROM users WHERE email = ?';
-  db.query(findUserQuery, [email], (err, results) => {
+    // Check if the user exists in the database
+    const findUserQuery = 'SELECT * FROM users WHERE email = ?';
+    db.query(findUserQuery, [email], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const user = results[0];
+
+        // Compare the password with the hashed password stored in the database
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: 'Server error' });
+            }
+
+            if (!isMatch) {
+                return res.status(400).json({ message: 'Invalid password' });
+            }
+
+            // Generate JWT token
+            const payload = {
+                id: user.id,
+                email: user.email,
+                fullName: user.fullName,
+            };
+
+            const token = jwt.sign(payload, 'your-secret-key', { expiresIn: '1h' });
+
+            res.status(200).json({ message: 'Login successful', token });
+        });
+    });
+});
+
+// Express route for forgot password - Get Security Question
+router.post('/forgot-password', (req, res) => {
+  const { email } = req.body;
+
+  // Query the database to get the user's security question
+  const query = 'SELECT securityQuestion FROM users WHERE email = ?';
+  db.query(query, [email], (err, result) => {
       if (err) {
           console.error(err);
           return res.status(500).json({ message: 'Server error' });
       }
 
-      if (results.length === 0) {
+      if (result.length > 0) {
+          return res.json({ success: true, securityQuestion: result[0].securityQuestion });
+      } else {
           return res.status(404).json({ message: 'User not found' });
       }
+  });
+});
 
-      const user = results[0];
 
-      // Compare the password with the hashed password stored in the database
-      bcrypt.compare(password, user.password, (err, isMatch) => {
+// Express route for verifying security answer
+router.post('/verify-answer', (req, res) => {
+    const { email, securityAnswer } = req.body;
+
+    // Query the database to get the stored security answer
+    const query = 'SELECT securityAnswer FROM users WHERE email = ?';
+    db.query(query, [email], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (result.length > 0 && result[0].securityAnswer === securityAnswer) {
+            return res.json({ success: true });
+        } else {
+            return res.status(400).json({ message: 'Incorrect answer' });
+        }
+    });
+});
+
+
+// Express route for resetting password
+router.post('/reset-password', (req, res) => {
+  const { email, newPassword } = req.body;
+
+  // Hash the new password
+  bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+      if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Server error' });
+      }
+
+      // Update the password in the database
+      const updateQuery = 'UPDATE users SET password = ? WHERE email = ?';
+      db.query(updateQuery, [hashedPassword, email], (err, result) => {
           if (err) {
               console.error(err);
-              return res.status(500).json({ message: 'Server error' });
+              return res.status(500).json({ message: 'Error updating password' });
           }
 
-          if (!isMatch) {
-              return res.status(400).json({ message: 'Invalid password' });
-          }
-
-          // Generate JWT token
-          const payload = {
-              id: user.id,
-              email: user.email,
-              fullName: user.fullName,
-          };
-
-          const token = jwt.sign(payload, 'your-secret-key', { expiresIn: '1h' });
-
-          res.status(200).json({ message: 'Login successful', token });
+          res.json({ success: true, message: 'Password reset successfully' });
       });
   });
 });
+
 
 module.exports = router;
