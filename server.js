@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 // Load environment variables
 dotenv.config();
 
+
 // Initialize express app
 const app = express();
 
@@ -20,8 +21,6 @@ app.use(bodyParser.json());
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: accessLogStream }));
 
-app.use(cors());
-app.use(bodyParser.json()); // Parse incoming JSON
 
 // Routes
 app.use('/api/auth', authRoutes);

@@ -4,25 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css files/login.css">
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <span id="emailError" class="error"></span>
+        <div class="login-box">
+            <h2>Login to Your Account</h2>
+            <form id="loginForm">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <span id="emailError" class="error"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <span id="passwordError" class="error"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <!-- Links for forgot password and sign up -->
+            <div class="links">
+                <a href="#" id="forgotPassword">Forgot Password?</a>
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <span id="passwordError" class="error"></span>
-            </div>
-            <button type="submit">Login</button>
-        </form>
+        </div>
     </div>
+
+    <!-- Add JavaScript -->
     <script src="login.js"></script>
 </body>
 </html>

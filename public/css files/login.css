@@ -1,0 +1,123 @@
+/* General body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Centered login container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Styling the login box */
+.login-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Header Styling */
+.login-box h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* Label Styling */
+label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* Input Fields Styling */
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #F9A826;
+    outline: none;
+}
+
+/* Error message styling */
+.error {
+    color: #ff4d4d;
+    font-size: 12px;
+    position: absolute;
+    bottom: -18px;
+}
+
+/* Button Styling */
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #F9A826;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #e68919;
+}
+
+/* Links Styling */
+.links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.links a {
+    text-decoration: none;
+    color: #F9A826;
+    font-weight: bold;
+}
+
+.links p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 20px;
+        width: 90%;
+    }
+
+    .login-box h2 {
+        font-size: 20px;
+    }
+}

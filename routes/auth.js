@@ -52,7 +52,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Check if user exists
+  // Check if the user exists in the database
   const findUserQuery = 'SELECT * FROM users WHERE email = ?';
   db.query(findUserQuery, [email], (err, results) => {
       if (err) {
@@ -66,7 +66,7 @@ router.post('/login', (req, res) => {
 
       const user = results[0];
 
-      // Compare password
+      // Compare the password with the hashed password stored in the database
       bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) {
               console.error(err);
@@ -77,21 +77,18 @@ router.post('/login', (req, res) => {
               return res.status(400).json({ message: 'Invalid password' });
           }
 
-          // Generate JWT Token
+          // Generate JWT token
           const payload = {
               id: user.id,
-              fullName: user.fullName,
               email: user.email,
-              role: user.role,
+              fullName: user.fullName,
           };
 
-          const token = jwt.sign(payload, 'f18334e53b62e12898aae4c8a21e75b83cd0bd349066a46e529e9a2ecde21a0057535233a44900079064e217f513b58ca834b2ca0589a983cf80c05f8dcf3c34', { expiresIn: '1h' });
+          const token = jwt.sign(payload, 'your-secret-key', { expiresIn: '1h' });
 
           res.status(200).json({ message: 'Login successful', token });
       });
   });
 });
-
-
 
 module.exports = router;
