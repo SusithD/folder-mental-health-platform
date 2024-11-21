@@ -3,12 +3,14 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
+    const captchaResponse = grecaptcha.getResponse(); // Get the CAPTCHA response
 
     let isValid = true;
 
     // Clear previous error messages
     document.getElementById('emailError').textContent = '';
     document.getElementById('passwordError').textContent = '';
+    document.getElementById('captchaError').textContent = '';
 
     // Validate Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,6 +28,12 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         isValid = false;
     }
 
+    // Validate CAPTCHA
+    if (!captchaResponse) {
+        document.getElementById('captchaError').textContent = 'Please complete the CAPTCHA.';
+        isValid = false;
+    }
+
     // If validation fails, return early
     if (!isValid) {
         return;
@@ -37,7 +45,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, captchaResponse }), // Send CAPTCHA response with login data
         });
 
         const data = await response.json();

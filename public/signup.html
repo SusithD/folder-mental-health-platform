@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 </head>
+
 <body>
     <div class="signup-container">
         <div class="form-section">
             <img src="assests/Images/undraw_online_ad_re_ol62.png" alt="Logo" class="signup-img">
             <div class="form-header">
-                <h1>Welcome to Our Platform</h1> 
+                <h1>Welcome to Our Platform</h1>
                 <p>Create your account to get started</p>
             </div>
             <form id="signupForm" class="signup-form">
@@ -98,6 +102,10 @@
                     <input type="text" id="securityAnswer" placeholder="Enter your answer" required />
                     <small class="error-message" id="securityAnswerError"></small>
                 </div>
+                <div class="form-group">
+                    <div class="g-recaptcha" data-sitekey="6LdmE4YqAAAAAE6gkXKubrcB_px9D_30mLdvXTqd"></div>
+                    <small class="error-message" id="captchaError"></small>
+                </div>
                 <button type="submit" class="btn-submit">Sign Up</button>
             </form>
             <p>Already have an account? <a href="login.html">Login</a></p>
@@ -105,4 +113,5 @@
     </div>
     <script src="app.js"></script>
 </body>
+
 </html>

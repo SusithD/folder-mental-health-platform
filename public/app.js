@@ -1,6 +1,13 @@
 document.getElementById('signupForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
+    const captchaResponse = grecaptcha.getResponse();
+    // Check if CAPTCHA is solved
+    if (!captchaResponse) {
+        document.getElementById('captchaError').textContent = 'Please complete the CAPTCHA.';
+        return;
+    }
+
     // Collecting form data
     const fullName = document.getElementById('fullName').value.trim();
     const email = document.getElementById('email').value.trim();
@@ -14,6 +21,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     const language = document.getElementById('language').value.trim();
     const securityQuestion = document.getElementById('securityQuestion').value.trim();
     const securityAnswer = document.getElementById('securityAnswer').value.trim();
+    captcha: captchaResponse;
 
     let isValid = true;
 
@@ -90,7 +98,8 @@ document.getElementById('signupForm').addEventListener('submit', async function(
         role,
         language,
         securityQuestion,
-        securityAnswer
+        securityAnswer,
+        captchaToken: captchaResponse
     };
 
     // Send the data to the server
