@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../db'); // Import your database connection (MySQL)
+const db = require('../db');
 const router = express.Router();
 
 // Register Route
@@ -49,41 +49,49 @@ router.post('/register', (req, res) => {
   });
 });
 
-// Login Route
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Find user in the database
-  const query = 'SELECT * FROM users WHERE email = ?';
-  db.query(query, [email], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Server error' });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const user = result[0];
-
-    // Compare password with hashed password
-    bcrypt.compare(password, user.password, (err, isMatch) => {
+  // Check if user exists
+  const findUserQuery = 'SELECT * FROM users WHERE email = ?';
+  db.query(findUserQuery, [email], (err, results) => {
       if (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error comparing passwords' });
+          console.error(err);
+          return res.status(500).json({ message: 'Server error' });
       }
 
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+      if (results.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
       }
 
-      // Create JWT token
-      const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const user = results[0];
 
-      res.json({ token, message: 'Login successful' });
-    });
+      // Compare password
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+          if (err) {
+              console.error(err);
+              return res.status(500).json({ message: 'Server error' });
+          }
+
+          if (!isMatch) {
+              return res.status(400).json({ message: 'Invalid password' });
+          }
+
+          // Generate JWT Token
+          const payload = {
+              id: user.id,
+              fullName: user.fullName,
+              email: user.email,
+              role: user.role,
+          };
+
+          const token = jwt.sign(payload, 'f18334e53b62e12898aae4c8a21e75b83cd0bd349066a46e529e9a2ecde21a0057535233a44900079064e217f513b58ca834b2ca0589a983cf80c05f8dcf3c34', { expiresIn: '1h' });
+
+          res.status(200).json({ message: 'Login successful', token });
+      });
   });
 });
+
+
 
 module.exports = router;
