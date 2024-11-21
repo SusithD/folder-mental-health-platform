@@ -1,7 +1,7 @@
 /* General body styling */
 body {
     font-family: 'Poppins', sans-serif;
-    background: #2c2c2c url('background-image.jpg') no-repeat center center fixed; /* Add a background image if desired */
+    background: #f3f4f6 url('background-image.jpg') no-repeat center center fixed; /* Add a background image if desired */
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -37,6 +37,15 @@ body {
         transform: translateY(0);
     }
 }
+
+.signup-img {
+    display: block;
+    margin: 0 auto;
+    width: 600px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
 
 /* Header styling */
 .form-header h1 {
@@ -122,9 +131,7 @@ body {
 }
 
 .signup-form button:hover {
-    background: #2c6739;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
 }
 
 /* Error message styling */
@@ -157,4 +164,24 @@ body {
     .signup-container {
         padding: 30px 20px;
     }
+}
+
+/* Centering the text and link */
+p {
+    text-align: center; /* Centers the text horizontally */
+    font-size: 14px; /* Optional: Adjusts the font size */
+    color: #666; /* Optional: Sets the text color */
+    margin: 10px 0; /* Optional: Adds vertical spacing */
+}
+
+/* Styling the link */
+p a {
+    text-decoration: none; /* Removes underline from the link */
+    color: #2c6739; /* Sets the link color */
+    font-weight: bold; /* Makes the link text bold */
+    transition: color 0.3s ease; /* Adds a hover effect */
+}
+
+p a:hover {
+    color: #3e804a; /* Changes link color on hover */
 }
