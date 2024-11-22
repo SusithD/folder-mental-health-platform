@@ -6,6 +6,8 @@
     <title>Mental Health Dashboard</title>
     <link rel="stylesheet" href="css files/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
     <div class="dashboard-container">
@@ -27,7 +29,7 @@
             <!-- Welcome Section -->
             <section id="welcome" class="section welcome">
                 <img src="assets/images/welcome-banner.jpg" alt="Welcome" class="banner-img">
-                <h1>Good Morning, [Name]</h1>
+                <h1>Good Morning, <span id="user-name">Loading...</span></h1>
                 <p>"Every day is a fresh start. Let's make it count."</p>
             </section>
 
@@ -101,5 +103,6 @@
             </section>
         </main>
     </div>
+    <script src="index.js"></script>
 </body>
 </html>
