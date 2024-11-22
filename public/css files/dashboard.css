@@ -153,8 +153,8 @@ h1, h2 {
 .card h3 {
     font-size: 1.5rem;
     color: #2c2c2c;
-    font-weight: 700;
-    text-align: left; /* Changed to left */
+    font-weight: 600;
+    text-align: left;
 }
 
 .card p {

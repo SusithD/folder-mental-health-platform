@@ -74,14 +74,22 @@
                     </div>
                     <div class="card">
                         <h3>Sleep Tracker</h3>
-                        <p>Average Sleep: 7.5 hours/night</p>
-                        <p>Recommended Sleep: 8 hours/night</p>
-                        <p>Last Night's Sleep: 6.8 hours</p>
-                        <p>Sleep Quality: 85% (Good)</p>
-                        <p>Deep Sleep: 2.5 hours</p>
-                        <p>Sleep Consistency: 6/7 nights within target range</p>
-                        <p>Sleep Goal: Improve by 30 minutes/night</p>
+                        <form id="sleep-form">
+                            <input type="number" id="average-sleep" placeholder="Average Sleep (hours)" required>
+                            <input type="number" id="recommended-sleep" placeholder="Recommended Sleep (hours)" required>
+                            <input type="number" id="last-night-sleep" placeholder="Last Night's Sleep (hours)" required>
+                            <input type="number" id="sleep-quality" placeholder="Sleep Quality (%)" required>
+                            <input type="number" id="deep-sleep" placeholder="Deep Sleep (hours)" required>
+                            <input type="number" id="sleep-consistency" placeholder="Sleep Consistency (nights/week)" required>
+                            <input type="text" id="sleep-goal" placeholder="Sleep Goal" required>
+                            <button type="submit">Submit Sleep Data</button>
+                        </form>
+                    
+                        <div id="sleep-result">
+                            <!-- Display the latest sleep data here -->
+                        </div>
                     </div>
+                    
                     <div class="card">
                         <h3>Activity Level</h3>
                         <p>Steps This Week: 8,000/day</p>

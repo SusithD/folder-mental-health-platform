@@ -95,7 +95,50 @@ router.get('/assessment-result', verifyToken, (req, res) => {
     });
 });
 
+// Route to submit sleep data
+router.post('/sleep', verifyToken, (req, res) => {
+    const { average_sleep, recommended_sleep, last_night_sleep, sleep_quality, deep_sleep, sleep_consistency, sleep_goal } = req.body;
 
+    const user_id = req.user.id;
+
+    if (!average_sleep || !recommended_sleep || !last_night_sleep || !sleep_quality || !deep_sleep || !sleep_consistency || !sleep_goal) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Insert the sleep data into the database
+    const query = 'INSERT INTO sleep_data (user_id, average_sleep, recommended_sleep, last_night_sleep, sleep_quality, deep_sleep, sleep_consistency, sleep_goal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(query, [user_id, average_sleep, recommended_sleep, last_night_sleep, sleep_quality, deep_sleep, sleep_consistency, sleep_goal], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error saving sleep data', error: err });
+        }
+        res.status(201).json({ message: 'Sleep data saved successfully' });
+    });
+});
+
+// Route to fetch the latest sleep data for the logged-in user
+router.get('/sleep-data', verifyToken, (req, res) => {
+    const userId = req.user.id;
+
+    const query = `
+        SELECT average_sleep, recommended_sleep, last_night_sleep, sleep_quality, deep_sleep, sleep_consistency, sleep_goal, created_at
+        FROM sleep_data
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+        LIMIT 1`; // Fetch the latest sleep data
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length > 0) {
+            return res.json(results[0]); // Return the latest sleep data
+        } else {
+            return res.status(404).json({ message: 'No sleep data found' });
+        }
+    });
+});
 
 
 module.exports = router;
