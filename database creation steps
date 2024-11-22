@@ -50,13 +50,15 @@ Yes, you can use **phpMyAdmin** to create and manage the database for your proje
 2. **Create `assessments` Table:**
    ```sql
    CREATE TABLE assessments (
-     id INT AUTO_INCREMENT PRIMARY KEY,
-     user_id INT,
-     score INT,
-     plan TEXT,
-     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-     FOREIGN KEY (user_id) REFERENCES users(id)
-   );
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    stress_level INT,
+    energy_level INT,
+    happiness_level INT,
+    score INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 
    -- Add the new fields to the users table

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar Navigation -->
@@ -38,9 +40,33 @@
                 <h2>Your Health Overview</h2>
                 <div class="status-cards">
                     <div class="card">
+                        <img src="assests/Images/undraw_Mindfulness_8gqa.png" alt="Mood Graph" class="card-img">
                         <h3>Mood Tracker</h3>
-                        <img src="assets/images/mood-graph.png" alt="Mood Graph" class="card-img">
-                        <p>Last Mood: Calm | Weekly Average: Positive</p>
+                        <!-- Assessment Section -->
+                        <section id="assessment" class="section assessment">
+                            <h2>Mental Health Assessment</h2>
+                            <form id="assessment-form">
+                                <label for="stress-level">Stress Level (1-10):</label>
+                                <input type="number" id="stress-level" name="stress_level" min="1" max="10" required>
+
+                                <label for="energy-level">Energy Level (1-10):</label>
+                                <input type="number" id="energy-level" name="energy_level" min="1" max="10" required>
+
+                                <label for="happiness-level">Happiness Level (1-10):</label>
+                                <input type="number" id="happiness-level" name="happiness_level" min="1" max="10"
+                                    required>
+
+                                <button type="submit" class="btn">Submit Assessment</button>
+                            </form>
+
+                            <!-- Section for Displaying Retrieved Details -->
+                            <div id="assessment-result-container">
+                                <h3>Latest Assessment</h3>
+                                <div id="assessment-result" class="assessment-card">
+
+                                </div>
+                            </div>
+                        </section>
                     </div>
                     <div class="card">
                         <h3>Sleep Tracker</h3>
@@ -105,4 +131,5 @@
     </div>
     <script src="index.js"></script>
 </body>
+
 </html>

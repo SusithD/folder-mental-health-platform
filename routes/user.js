@@ -46,5 +46,56 @@ router.get('/profile', verifyToken, (req, res) => {
     });
 });
 
+// Route to handle assessment submissions
+router.post('/assessments', verifyToken, (req, res) => {
+    const { stress_level, energy_level, happiness_level } = req.body;
+
+    // Use user_id from decoded token
+    const user_id = req.user.id;
+
+    if (!stress_level || !energy_level || !happiness_level) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Calculate the score (for simplicity, average the three levels)
+    const score = (parseInt(stress_level) + parseInt(energy_level) + parseInt(happiness_level)) / 3;
+
+    // Insert the assessment into the database
+    const query = 'INSERT INTO assessments (user_id, stress_level, energy_level, happiness_level, score) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [user_id, stress_level, energy_level, happiness_level, score], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error saving assessment', error: err });
+        }
+        res.status(201).json({ message: 'Assessment saved successfully' });
+    });
+});
+
+// Route to fetch assessments for the logged-in user
+router.get('/assessment-result', verifyToken, (req, res) => {
+    const userId = req.user.id;
+
+    const query = `
+        SELECT stress_level, energy_level, happiness_level, score, created_at
+        FROM assessments
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+        LIMIT 1`; // Fetch the latest assessment
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length > 0) {
+            return res.json(results[0]); // Return the latest assessment
+        } else {
+            return res.status(404).json({ message: 'No assessments found' });
+        }
+    });
+});
+
+
+
 
 module.exports = router;
