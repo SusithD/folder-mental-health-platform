@@ -139,15 +139,8 @@ h1, h2 {
     width: 100%;
     box-sizing: border-box;
     margin: 20px auto;
-    text-align: left; /* Changed to left */
+    text-align: left;
     animation: fadeIn 0.8s ease-in-out;
-}
-
-.card-img {
-    width: 100%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border-radius: 8px;
 }
 
 .card h3 {
@@ -157,78 +150,55 @@ h1, h2 {
     text-align: left;
 }
 
-.card p {
-    font-size: 1rem;
-    color: #666;
-    margin-top: 15px;
-    font-weight: 500;
-    text-align: left; /* Changed to left */
-}
-
-.assessment {
-    align-items: flex-start;
-    text-align: left;
-    margin-top: 20px;
-}
-
-.assessment h2 {
-    font-size: 12px;
-    font-weight: 600;
-    color: #2c2c2c;
-    text-align: left; /* Changed to left */
-}
-
-.assessment form {
+#sleep-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    align-items: left; /* Center all elements horizontally */
+    align-items: flex-start;
     max-width: 600px;
-    margin: 0 auto; /* Center the form itself horizontally */
+    margin: 0 auto;
 }
 
-.assessment label {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #444;
-    margin-bottom: 5px;
-    text-align: left; /* Changed to left */
-}
-
-.assessment input {
-    width: 80%; /* Make the input smaller and centered */
+#sleep-form input {
+    width: 80%;
     padding: 10px 15px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     background: #f9f9f9;
     transition: border-color 0.3s, box-shadow 0.3s;
-    text-align: left; /* Optionally center the text inside the input */
+    text-align: left;
 }
 
-.assessment input:focus {
+#sleep-form input:focus {
     border-color: #2c6739;
     box-shadow: 0 0 6px rgba(44, 103, 57, 0.3);
     outline: none;
 }
 
-.assessment button {
-    background: linear-gradient(45deg, #2c6739, #3e804a);
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #ffffff;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-    align-self: flex-start; /* Changed to flex-start */
+#sleep-form button {
+    padding: 10px 15px; 
+    background-color: #2c6739; 
+    color: #ffffff; 
+    font-size: 1em; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
 }
 
-.assessment button:hover {
-    transform: translateY(-2px);
+
+#sleep-result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: #444;
+    font-size: 1rem;
+    text-align: left;
 }
+
 
 #assessment-result-container {
     margin-top: 20px;
@@ -255,6 +225,53 @@ h1, h2 {
     margin: 0 auto;
 }
 
+.card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card input {
+    padding: 10px 15px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    font-size: 1em; 
+    color: #2c2c2c;
+    background-color: #f9f9f9; 
+    transition: all 0.3s ease; 
+}
+
+.card input:focus {
+    outline: none; 
+    border-color: #2c6739; 
+    box-shadow: 0 0 5px rgba(1, 155, 78, 0.5); 
+}
+
+.card button {
+    padding: 10px 15px; 
+    background-color: #2c6739; 
+    color: #ffffff; 
+    font-size: 1em; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.card button:hover {
+    background-color: #2c6739; 
+}
+
+#sleep-result {
+    margin-top: 20px; 
+    background-color: #f9f9f9; 
+    padding: 15px; 
+    border-radius: 5px;
+    border: 1px solid #ddd; 
+    color: #2c2c2c; 
+    font-size: 0.9em; 
+    line-height: 1.5;
+}
 
 /* Resource cards */
 .resources-grid {
@@ -360,7 +377,7 @@ ul li {
 
 .single-image-container img {
     max-width: 100%;
-    height: 300px;
+    height: 400px;
     object-fit: cover;
     border-radius: 6px;
 }

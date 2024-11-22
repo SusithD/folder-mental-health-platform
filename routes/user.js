@@ -141,4 +141,53 @@ router.get('/sleep-data', verifyToken, (req, res) => {
 });
 
 
+// Route to handle activity data submission
+router.post('/activity', verifyToken, (req, res) => {
+    const { steps_per_day, calories_burned, active_days, most_active_day, inactive_days, weekly_goal } = req.body;
+
+    const user_id = req.user.id;
+
+    if (!steps_per_day || !calories_burned || !active_days || !most_active_day || !inactive_days || !weekly_goal) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const query = `
+        INSERT INTO activity_data (user_id, steps_per_day, calories_burned, active_days, most_active_day, inactive_days, weekly_goal)
+        VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    db.query(query, [user_id, steps_per_day, calories_burned, active_days, most_active_day, inactive_days, weekly_goal], (err, result) => {
+        if (err) {
+            console.error('Error saving activity data:', err);
+            return res.status(500).json({ message: 'Error saving activity data', error: err });
+        }
+        res.status(201).json({ message: 'Activity data saved successfully' });
+    });
+});
+
+
+// Fetch the latest activity data
+router.get('/activity-data', verifyToken, (req, res) => {
+    const user_id = req.user.id;
+
+    const query = `
+        SELECT steps_per_day, calories_burned, active_days, most_active_day, inactive_days, weekly_goal, created_at
+        FROM activity_data
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+        LIMIT 1`;
+
+    db.query(query, [user_id], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length > 0) {
+            return res.json(results[0]);
+        } else {
+            return res.status(404).json({ message: 'No activity data found' });
+        }
+    });
+});
+
 module.exports = router;

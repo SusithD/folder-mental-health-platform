@@ -92,15 +92,22 @@
                     
                     <div class="card">
                         <h3>Activity Level</h3>
-                        <p>Steps This Week: 8,000/day</p>
-                        <p>Total Steps This Week: 56,000</p>
-                        <p>Calories Burned: 3,200 kcal</p>
-                        <p>Active Days: 5/7</p>
-                        <p>Most Active Day: Thursday (10,000 steps)</p>
-                        <p>Inactive Days: Sunday, Monday</p>
-                        <p>Weekly Goal: Reach 70,000 steps (10,000/day)</p>
-                    </div>
-
+                        <p>Steps This Week: <span id="steps-per-day">8,000/day</span></p>
+                        <p>Total Steps This Week: <span id="total-steps">56,000</span></p>
+                        <p>Calories Burned: <span id="calories-burned">3,200 kcal</span></p>
+                        <p>Active Days: <span id="active-days">5/7</span></p>
+                        <p>Most Active Day: <span id="most-active-day">Thursday (10,000 steps)</span></p>
+                        <p>Inactive Days: <span id="inactive-days">Sunday, Monday</span></p>
+                        <p>Weekly Goal: <span id="weekly-goal">Reach 70,000 steps (10,000/day)</span></p>
+                    
+                        <form id="activity-form">
+                            <h4>Log Activity</h4>
+                            <label for="steps-today">Steps Today:</label>
+                            <input type="number" id="steps-today" placeholder="Enter steps" required />
+                            <button type="submit">Submit</button>
+                        </form>
+                        <div id="activity-status"></div>
+                    </div>    
                 </div>
             </section>
 
