@@ -1,32 +1,105 @@
-<!-- public/signup.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Dashboard</title>
+    <link rel="stylesheet" href="css files/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <h2>Sign Up</h2>
-    <form id="signup-form">
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-      <label for="role">Role:</label>
-      <select id="role" name="role" required>
-        <option value="user">User</option>
-        <option value="counselor">Counselor</option>
-        <option value="admin">Admin</option>
-      </select>
-      <label for="is_anonymous">Anonymity:</label>
-      <input type="checkbox" id="is_anonymous" name="is_anonymous">
-      <button type="submit">Sign Up</button>
-    </form>
-  </div>
-  <script src="login.js"></script>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <h2>Mental Wellness</h2>
+            <ul>
+                <li><a href="#welcome"><i class="fas fa-smile"></i> Welcome</a></li>
+                <li><a href="#overview"><i class="fas fa-chart-pie"></i> Overview</a></li>
+                <li><a href="#resources"><i class="fas fa-book"></i> Resources</a></li>
+                <li><a href="#journal"><i class="fas fa-pencil-alt"></i> Journaling</a></li>
+                <li><a href="#support"><i class="fas fa-users"></i> Support</a></li>
+                <li><a href="#calendar"><i class="fas fa-calendar"></i> Events</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Dashboard -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section id="welcome" class="section welcome">
+                <img src="assets/images/welcome-banner.jpg" alt="Welcome" class="banner-img">
+                <h1>Good Morning, [Name]</h1>
+                <p>"Every day is a fresh start. Let's make it count."</p>
+            </section>
+
+            <!-- Health Overview -->
+            <section id="overview" class="section overview">
+                <h2>Your Health Overview</h2>
+                <div class="status-cards">
+                    <div class="card">
+                        <h3>Mood Tracker</h3>
+                        <img src="assets/images/mood-graph.png" alt="Mood Graph" class="card-img">
+                        <p>Last Mood: Calm | Weekly Average: Positive</p>
+                    </div>
+                    <div class="card">
+                        <h3>Sleep Tracker</h3>
+                        <img src="assets/images/sleep-chart.png" alt="Sleep Chart" class="card-img">
+                        <p>Average Sleep: 7.5 hours</p>
+                    </div>
+                    <div class="card">
+                        <h3>Activity Level</h3>
+                        <img src="assets/images/activity-chart.png" alt="Activity Chart" class="card-img">
+                        <p>Steps This Week: 8,000/day</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resources" class="section resources">
+                <h2>Mental Health Resources</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <img src="assets/images/resource-1.jpg" alt="Mindfulness">
+                        <h3>Mindfulness Basics</h3>
+                        <p>Learn how to stay present in the moment.</p>
+                    </div>
+                    <div class="resource-card">
+                        <img src="assets/images/resource-2.jpg" alt="Stress Management">
+                        <h3>Managing Stress</h3>
+                        <p>Techniques to cope with everyday stressors.</p>
+                    </div>
+                    <div class="resource-card">
+                        <img src="assets/images/resource-3.jpg" alt="Anxiety Relief">
+                        <h3>Anxiety Relief</h3>
+                        <p>Tips to calm your mind during anxious moments.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Journaling Section -->
+            <section id="journal" class="section journaling">
+                <h2>Your Journal</h2>
+                <textarea placeholder="Write down your thoughts..." class="journal-input"></textarea>
+                <button class="btn">Save Entry</button>
+            </section>
+
+            <!-- Support Section -->
+            <section id="support" class="section">
+                <h2>Community Support</h2>
+                <button class="btn">📞 Contact Therapist</button>
+                <button class="btn">👥 Join Support Group</button>
+                <p>Emergency? Call <strong>1-800-HELP</strong></p>
+            </section>
+
+            <!-- Calendar Section -->
+            <section id="calendar" class="section">
+                <h2>Upcoming Events</h2>
+                <img src="assets/images/calendar.png" alt="Calendar" class="calendar-img">
+                <ul>
+                    <li>Therapy Session: Friday, 10 AM</li>
+                    <li>Meditation Workshop: Sunday, 5 PM</li>
+                </ul>
+            </section>
+        </main>
+    </div>
 </body>
 </html>

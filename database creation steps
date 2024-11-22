@@ -1,0 +1,162 @@
+Yes, you can use **phpMyAdmin** to create and manage the database for your project. It's a user-friendly tool for interacting with MySQL databases. Here's how to proceed step by step:
+
+---
+
+### **Step 1: Set Up phpMyAdmin**
+1. **Install XAMPP or WAMP (if not already installed):**
+   - XAMPP: Includes Apache, PHP, and MySQL, along with phpMyAdmin.
+   - Download from [XAMPP official website](https://www.apachefriends.org/index.html).
+   - Start the **Apache** and **MySQL** services using the XAMPP control panel.
+
+2. **Access phpMyAdmin:**
+   - Open your browser and go to `http://localhost/phpmyadmin`.
+
+---
+
+### **Step 2: Create the Database**
+1. **Create a New Database:**
+   - In phpMyAdmin, click on the **"Databases"** tab.
+   - Enter a name for your database, e.g., `mental_health_platform`.
+   - Select the collation as `utf8_general_ci` for better compatibility.
+   - Click **Create**.
+
+2. **Create a Non-Root Database User:**
+   - Go to the **"User Accounts"** tab.
+   - Click **Add user account**.
+   - Fill in:
+     - Username: e.g., `mh_user`
+     - Hostname: `localhost`
+     - Password: Choose a strong password.
+   - Under **Database for user**, select **Create database with same name and grant all privileges**.
+   - Scroll down and click **Go**.
+
+---
+
+### **Step 3: Create Tables**
+1. **Create `users` Table:**
+   - Go to your database (e.g., `mental_health_platform`).
+   - Click on **"SQL"** and paste the following query:
+     ```sql
+     CREATE TABLE users (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       email VARCHAR(255) NOT NULL UNIQUE,
+       password VARCHAR(255) NOT NULL,
+       role ENUM('user', 'counselor', 'admin') DEFAULT 'user',
+       is_anonymous BOOLEAN DEFAULT FALSE,
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+     );
+     ```
+
+2. **Create `assessments` Table:**
+   ```sql
+   CREATE TABLE assessments (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id INT,
+     score INT,
+     plan TEXT,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (user_id) REFERENCES users(id)
+   );
+
+
+   -- Add the new fields to the users table
+ALTER TABLE users
+ADD COLUMN fullName VARCHAR(255) NOT NULL,
+ADD COLUMN dob DATE NOT NULL,
+ADD COLUMN gender VARCHAR(50) NOT NULL,
+ADD COLUMN phone VARCHAR(15),
+ADD COLUMN emergencyContact VARCHAR(15),
+ADD COLUMN language VARCHAR(50) NOT NULL,
+ADD COLUMN securityQuestion VARCHAR(255) NOT NULL,
+ADD COLUMN securityAnswer VARCHAR(255) NOT NULL;
+
+   ```
+
+3. **Create `sessions` Table:**
+   ```sql
+   CREATE TABLE sessions (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id INT,
+     counselor_id INT,
+     date DATETIME,
+     fee DECIMAL(10, 2),
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (user_id) REFERENCES users(id),
+     FOREIGN KEY (counselor_id) REFERENCES users(id)
+   );
+   ```
+
+4. **Create `chats` Table:**
+   ```sql
+   CREATE TABLE chats (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     sender_id INT,
+     receiver_id INT,
+     message TEXT,
+     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (sender_id) REFERENCES users(id),
+     FOREIGN KEY (receiver_id) REFERENCES users(id)
+   );
+   ```
+
+---
+
+### **Step 4: Verify and Secure Your Database**
+1. **Test the Setup:**
+   - Open the **SQL** tab and run:
+     ```sql
+     SHOW TABLES;
+     ```
+   - Ensure all tables (`users`, `assessments`, `sessions`, `chats`) are listed.
+
+2. **Set Minimal Privileges for `mh_user`:**
+   - Go to the **"User Accounts"** tab.
+   - Locate `mh_user` and click **Edit Privileges**.
+   - Grant only the following privileges:
+     - **SELECT**, **INSERT**, **UPDATE**, **DELETE**
+     - **CREATE**, **DROP**
+   - Remove any unnecessary privileges like **GRANT OPTION** or **SUPER**.
+
+3. **Export the Database Schema (Optional for Backup):**
+   - Go to the **Export** tab.
+   - Select **Quick - display only the minimal options**.
+   - Click **Go** to download the SQL file.
+
+---
+
+### **Step 5: Connect Your App to the Database**
+1. Update your `.env` file with the database details:
+   ```
+   DB_HOST=localhost
+   DB_USER=mh_user
+   DB_PASSWORD=your_password
+   DB_NAME=mental_health_platform
+   ```
+
+2. Configure the database connection in `server.js`:
+   ```javascript
+   const mysql = require('mysql2');
+   require('dotenv').config();
+
+   const db = mysql.createConnection({
+     host: process.env.DB_HOST,
+     user: process.env.DB_USER,
+     password: process.env.DB_PASSWORD,
+     database: process.env.DB_NAME,
+   });
+
+   db.connect((err) => {
+     if (err) {
+       console.error('Error connecting to the database:', err);
+       process.exit(1);
+     }
+     console.log('Connected to the MySQL database');
+   });
+
+   module.exports = db;
+   ```
+
+---
+
+### **Next Steps**
+- Let me know once your database is set up, and we can move on to implementing specific features, starting with **User Registration**! 🚀
