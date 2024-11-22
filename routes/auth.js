@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
   } = req.body;
 
   // CAPTCHA Secret Key (replace with your actual secret key)
-  const CAPTCHA_SECRET_KEY = 'your-secret-key';
+  const CAPTCHA_SECRET_KEY = process.env.CAPTCHA_SECRET_KEY;
 
   try {
     // Verify CAPTCHA
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
   const { email, password, captchaResponse } = req.body;
 
   // Verify CAPTCHA
-  const secretKey = 'your-secret-key';  // Use your secret key from Google reCAPTCHA
+  const secretKey = process.env.CAPTCHA_SECRET_KEY; 
   try {
       const captchaVerification = await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
           params: {
