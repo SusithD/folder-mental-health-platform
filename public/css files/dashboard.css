@@ -92,7 +92,7 @@ body {
 
 /* Active State */
 .sidebar ul li a.active {
-    background-color: #f9a826;
+    background-color: #2c6739;
     color: #2c2c2c;
     font-weight: 600; /* Bold active link for emphasis */
 }
@@ -106,6 +106,21 @@ body {
     background-color: #ffffff;
     box-sizing: border-box;
 }
+
+/* Logout Button Styling */
+.logout-btn {
+    background-color: #2c6739; /* Accent color */
+    color: #ffffff; /* Dark text */
+    font-size: 1.1rem;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Full-width button */
+    margin-top: 2rem; /* Space above button */
+}
+
 
 /* Section styling */
 .section {
@@ -273,36 +288,91 @@ h1, h2 {
     line-height: 1.5;
 }
 
-/* Resource cards */
+/* Resources Section */
+.resources {
+    margin: 40px 0;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.resources h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c2c2c;
+}
+
+.resources p {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #666;
+}
+
 .resources-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
 }
 
 .resource-card {
     background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 15px;
+    padding: 15px;
+    border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+
 
 .resource-card img {
     width: 100%;
-    height: 150px;
+    height: 180px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
 .resource-card h3 {
-    font-size: 1.2rem;
-    margin-top: 15px;
+    font-size: 1.4rem;
+    color: #2c2c2c;
+    margin-bottom: 10px;
+    font-weight: 600;
 }
 
 .resource-card p {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #666;
+    margin-bottom: 15px;
 }
+
+.resource-link {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #2c6739;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.resource-link:hover {
+    background-color: #3e804a;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* Journaling section */
 .journaling textarea {
@@ -331,10 +401,81 @@ h1, h2 {
     background-color: #3e804a;
 }
 
-/* Support section */
-section#support button {
-    margin-right: 15px;
+/* Support Section Styles */
+#support {
+    background-color: #f9f9f9; 
+    padding: 2rem; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin: 2rem 0; 
+    text-align: center; 
 }
+
+#support h2 {
+    font-size: 2rem; 
+    color: #2c2c2c;
+    margin-bottom: 1rem; 
+}
+
+#support p {
+    font-size: 1rem; 
+    color: #555; 
+    margin: 0.5rem 0; 
+}
+
+#support .support-buttons {
+    display: flex; 
+    justify-content: center; 
+    gap: 2rem; 
+    margin: 1.5rem 0; 
+    flex-wrap: wrap; 
+}
+
+#support .support-option {
+    flex: 1 1 45%; 
+    text-align: center; 
+    max-width: 300px; 
+    margin: 0 auto; 
+}
+
+#support .btn {
+    display: block; 
+    width: 100%; 
+    padding: 0.75rem 1.5rem; 
+    background-color: #2c2c2c; 
+    color: #fff; 
+    border: none; 
+    border-radius: 4px; 
+    font-size: 1rem; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+}
+
+#support .btn:hover {
+    background-color: #2c6739; /* Highlight color */
+    color: #ffffff; /* Dark text for contrast */
+}
+
+#support .emergency {
+    margin-top: 1.5rem; /* Space above emergency section */
+    font-size: 1rem; /* Standard text size */
+    color: #555; /* Subtle text color */
+}
+
+#support .emergency strong {
+    color: #2c6739; /* Highlight emergency number */
+}
+
+#support .emergency a {
+    color: #2c2c2c; /* Link color */
+    text-decoration: underline; /* Underline link */
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+#support .emergency a:hover {
+    color: #2c6739; /* Highlight link on hover */
+}
+
 
 /* Calendar Section */
 section#calendar img {
@@ -393,3 +534,94 @@ ul li {
     border-radius: 5px;
 }
 
+/* General Popup Styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+/* Popup Content */
+.popup-content {
+    background: #ffffff;
+    padding: 30px;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Popup Image */
+.popup-image {
+    max-width: 200px;
+    margin: 0 auto 20px;
+}
+
+/* Popup Heading and Text */
+/* Centered Heading */
+.centered-heading {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center; /* Centers the text horizontally */
+    display: block;     /* Ensures it behaves as a block element */
+    margin: 0 auto;
+    font-weight: 600;     /* Ensures it is properly centered */
+}
+
+
+.popup-content p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Popup Actions (Buttons) */
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.popup-actions .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-actions .btn.confirm {
+    background-color: #2c6739;
+    color: #fff;
+}
+
+.popup-actions .btn.confirm:hover {
+    background-color: #2c6739;
+}
+
+.popup-actions .btn.cancel {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.popup-actions .btn.cancel:hover {
+    background-color: #ddd;
+}

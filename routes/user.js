@@ -190,4 +190,37 @@ router.get('/activity-data', verifyToken, (req, res) => {
     });
 });
 
+router.post('/journals', verifyToken, (req, res) => {
+    const userId = req.user.id;
+    const { entry } = req.body;
+
+    if (!entry) {
+        return res.status(400).json({ message: 'Journal entry cannot be empty.' });
+    }
+
+    const query = 'INSERT INTO journals (user_id, entry) VALUES (?, ?)';
+    db.query(query, [userId, entry], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error saving journal entry.' });
+        }
+        res.status(201).json({ message: 'Journal entry saved successfully.' });
+    });
+});
+
+
+router.get('/journals', verifyToken, (req, res) => {
+    const userId = req.user.id;
+
+    const query = 'SELECT id, entry, created_at FROM journals WHERE user_id = ? ORDER BY created_at DESC';
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error fetching journal entries.' });
+        }
+        res.json(results);
+    });
+});
+
+
 module.exports = router;

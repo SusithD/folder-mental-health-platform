@@ -24,6 +24,34 @@
                 <li><a href="#support"><i class="fas fa-users"></i> Support</a></li>
                 <li><a href="#calendar"><i class="fas fa-calendar"></i> Events</a></li>
             </ul>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div id="logout-popup" class="popup hidden">
+                <div class="popup-content">
+                    <img src="assests/Images/logout.png" alt="Logout Illustration" class="popup-image">
+                    <h5 class="centered-heading">Confirm Logout</h5>
+                    <p>You are about to log out of your account. Make sure to save your work before leaving.</p>
+                    <div class="popup-actions">
+                        <button id="logout-confirm" class="btn confirm">Yes, Log Me Out</button>
+                        <button id="logout-cancel" class="btn cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                function logout() {
+                    const popup = document.getElementById("logout-popup");
+                    popup.classList.remove("hidden");
+                    document.getElementById("logout-confirm").onclick = function () {
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        window.location.href = 'login.html'
+                    };
+                    document.getElementById("logout-cancel").onclick = function () {
+                        popup.classList.add("hidden");
+                    };
+                }
+
+            </script>
         </nav>
 
         <!-- Main Dashboard -->
@@ -36,7 +64,8 @@
 
             <section id="slideshow" class="slideshow">
                 <div class="single-image-container">
-                    <img src="assests/Images/drew-bae-g3nnb9WXlIE-unsplash.jpg" style="width:100%" alt="Mindfulness and Relaxation">
+                    <img src="assests/Images/drew-bae-g3nnb9WXlIE-unsplash.jpg" style="width:100%"
+                        alt="Mindfulness and Relaxation">
                 </div>
             </section>
 
@@ -76,20 +105,23 @@
                         <h3>Sleep Tracker</h3>
                         <form id="sleep-form">
                             <input type="number" id="average-sleep" placeholder="Average Sleep (hours)" required>
-                            <input type="number" id="recommended-sleep" placeholder="Recommended Sleep (hours)" required>
-                            <input type="number" id="last-night-sleep" placeholder="Last Night's Sleep (hours)" required>
+                            <input type="number" id="recommended-sleep" placeholder="Recommended Sleep (hours)"
+                                required>
+                            <input type="number" id="last-night-sleep" placeholder="Last Night's Sleep (hours)"
+                                required>
                             <input type="number" id="sleep-quality" placeholder="Sleep Quality (%)" required>
                             <input type="number" id="deep-sleep" placeholder="Deep Sleep (hours)" required>
-                            <input type="number" id="sleep-consistency" placeholder="Sleep Consistency (nights/week)" required>
+                            <input type="number" id="sleep-consistency" placeholder="Sleep Consistency (nights/week)"
+                                required>
                             <input type="text" id="sleep-goal" placeholder="Sleep Goal" required>
                             <button type="submit">Submit Sleep Data</button>
                         </form>
-                    
+
                         <div id="sleep-result">
                             <!-- Display the latest sleep data here -->
                         </div>
                     </div>
-                    
+
                     <div class="card">
                         <h3>Activity Level</h3>
                         <p>Steps This Week: <span id="steps-per-day">8,000/day</span></p>
@@ -99,7 +131,7 @@
                         <p>Most Active Day: <span id="most-active-day">Thursday (10,000 steps)</span></p>
                         <p>Inactive Days: <span id="inactive-days">Sunday, Monday</span></p>
                         <p>Weekly Goal: <span id="weekly-goal">Reach 70,000 steps (10,000/day)</span></p>
-                    
+
                         <form id="activity-form">
                             <h4>Log Activity</h4>
                             <label for="steps-today">Steps Today:</label>
@@ -107,55 +139,74 @@
                             <button type="submit">Submit</button>
                         </form>
                         <div id="activity-status"></div>
-                    </div>    
+                    </div>
                 </div>
             </section>
 
-            <!-- Resources Section -->
             <section id="resources" class="section resources">
                 <h2>Mental Health Resources</h2>
+                <p>Explore articles, videos, and self-help materials to support your mental health journey.</p>
                 <div class="resources-grid">
                     <div class="resource-card">
-                        <img src="assets/images/resource-1.jpg" alt="Mindfulness">
+                        <img src="assests/Images/resource-1.jpeg" alt="Mindfulness">
                         <h3>Mindfulness Basics</h3>
                         <p>Learn how to stay present in the moment.</p>
+                        <a href="#" class="resource-link">Read Article</a>
                     </div>
                     <div class="resource-card">
-                        <img src="assets/images/resource-2.jpg" alt="Stress Management">
+                        <img src="assests/Images/resource-2.jpeg" alt="Stress Management">
                         <h3>Managing Stress</h3>
                         <p>Techniques to cope with everyday stressors.</p>
+                        <a href="#" class="resource-link">Watch Video</a>
                     </div>
                     <div class="resource-card">
-                        <img src="assets/images/resource-3.jpg" alt="Anxiety Relief">
+                        <img src="assests/Images/resource-3.jpeg" alt="Anxiety Relief">
                         <h3>Anxiety Relief</h3>
                         <p>Tips to calm your mind during anxious moments.</p>
+                        <a href="#" class="resource-link">Explore Guide</a>
+                    </div>
+                    <div class="resource-card">
+                        <img src="assests/Images/resource-4.jpeg" alt="Emotional Well-being">
+                        <h3>Emotional Well-being</h3>
+                        <p>Understanding and managing your emotions effectively.</p>
+                        <a href="#" class="resource-link">Read Article</a>
+                    </div>
+                    <div class="resource-card">
+                        <img src="assests/Images/resource-5.jpeg" alt="Work-Life Balance">
+                        <h3>Work-Life Balance</h3>
+                        <p>Practical steps for balancing personal and professional life.</p>
+                        <a href="#" class="resource-link">Watch Video</a>
                     </div>
                 </div>
             </section>
 
-            <!-- Journaling Section -->
+
             <section id="journal" class="section journaling">
                 <h2>Your Journal</h2>
-                <textarea placeholder="Write down your thoughts..." class="journal-input"></textarea>
-                <button class="btn">Save Entry</button>
+                <textarea id="journal-input" placeholder="Write down your thoughts..." class="journal-input"></textarea>
+                <button id="save-journal-btn" class="btn">Save Entry</button>
+                <div id="journal-entries" class="journal-entries">
+                    <!-- Journal entries will be dynamically loaded here -->
+                </div>
             </section>
 
             <!-- Support Section -->
             <section id="support" class="section">
                 <h2>Community Support</h2>
-                <button class="btn">📞 Contact Therapist</button>
-                <button class="btn">👥 Join Support Group</button>
-                <p>Emergency? Call <strong>1-800-HELP</strong></p>
-            </section>
-
-            <!-- Calendar Section -->
-            <section id="calendar" class="section">
-                <h2>Upcoming Events</h2>
-                <img src="assets/images/calendar.png" alt="Calendar" class="calendar-img">
-                <ul>
-                    <li>Therapy Session: Friday, 10 AM</li>
-                    <li>Meditation Workshop: Sunday, 5 PM</li>
-                </ul>
+                <p>We're here to help you find the support you need. Explore resources to connect with professionals or
+                    join a group of people who care.</p>
+                <div class="support-buttons">
+                    <div class="support-option">
+                        <button class="btn">📞 Contact Therapist</button>
+                        <p>Speak to a licensed therapist for professional guidance and support.</p>
+                    </div>
+                    <div class="support-option">
+                        <button class="btn">👥 Join Support Group</button>
+                        <p>Connect with others in a safe and understanding community.</p>
+                    </div>
+                </div>
+                <p class="emergency">Emergency? Call <strong>1-800-HELP</strong> or visit our <a href="#">Emergency
+                        Resources</a> page.</p>
             </section>
         </main>
     </div>
