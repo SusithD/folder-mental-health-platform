@@ -359,12 +359,16 @@ h1, h2 {
     background-color: #fff;
     width: 100%;
     max-width: 650px;
+    height: auto;
+    max-height: 600px; /* You can adjust the max height as per your need */
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     position: relative;
     animation: slideIn 0.3s ease-out;
+    overflow-y: auto; /* Enables vertical scrolling */
 }
+
 
 
 /* Popup Header */
@@ -389,7 +393,7 @@ h1, h2 {
 .popup-content .btn {
     display: block;
     width: 100%;
-    background-color: #F9A826; /* Accent color */
+    background-color: #2c6739; /* Accent color */
     color: #fff;
     padding: 14px;
     font-size: 1.2rem;
@@ -399,10 +403,6 @@ h1, h2 {
     transition: background-color 0.3s ease;
 }
 
-/* Hover effect for button */
-.popup-content .btn:hover {
-    background-color: #d88d1f;
-}
 
 /* Close button positioning for better UX */
 .popup-content .close-popup {
@@ -433,3 +433,103 @@ h1, h2 {
     }
 }
 
+
+
+
+#session-details-popup select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f9f9f9;
+    margin-bottom: 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#session-details-popup select:focus {
+    border-color: #2c6739;
+    box-shadow: 0 0 6px rgba(44, 103, 57, 0.3);
+    outline: none;
+}
+
+.payment-details {
+    margin-top: 20px;
+}
+
+.payment-details h4 {
+    font-size: 1.2rem;
+    color: #2c2c2c;
+    margin-bottom: 10px;
+}
+
+.payment-details label {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #333;
+    display: block;
+}
+
+.payment-details input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f9f9f9;
+    margin-bottom: 15px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.payment-details input:focus {
+    border-color: #2c6739;
+    box-shadow: 0 0 6px rgba(44, 103, 57, 0.3);
+    outline: none;
+}
+
+.terms-and-conditions, .privacy-policy {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.terms-and-conditions label, .privacy-policy label {
+    display: flex;
+    align-items: center;
+}
+
+.terms-and-conditions input, .privacy-policy input {
+    margin-right: 10px;
+}
+
+.terms-and-conditions a, .privacy-policy a {
+    color: #2c6739;
+    text-decoration: none;
+}
+
+.terms-and-conditions a:hover, .privacy-policy a:hover {
+    text-decoration: underline;
+}
+
+.confirm-booking {
+    background-color: #2c6739;
+    color: #ffffff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.confirm-booking:hover {
+    background-color: #1e4d27;
+}
+
+#session-details-popup .popup-content {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}

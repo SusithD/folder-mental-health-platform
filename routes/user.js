@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
-const axios = require('axios'); 
+const axios = require('axios');
 const router = express.Router();
 require('dotenv').config();
 
@@ -267,6 +267,53 @@ router.get('/sessions/:id', verifyToken, (req, res) => {
         }
     });
 });
+
+router.post('/book-session', verifyToken, (req, res) => {
+    const { sessionId, paymentMethod, paymentDetails } = req.body;
+    const user_id = req.user.id;
+
+    if (!sessionId || !paymentMethod) {
+        return res.status(400).json({ message: 'Session ID and payment method are required' });
+    }
+
+    const querySession = 'SELECT * FROM sessions WHERE session_id = ?';
+    db.query(querySession, [sessionId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error fetching session details', error: err });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Session not found' });
+        }
+
+        let paymentSuccess = false;
+        if (paymentMethod === 'credit-card' && paymentDetails) {
+            paymentSuccess = processCreditCard(paymentDetails); // Actual integration required
+        } else if (paymentMethod === 'paypal') {
+            paymentSuccess = processPayPal(); // Actual integration required
+        }
+
+        if (!paymentSuccess) {
+            return res.status(400).json({ message: 'Payment failed. Please check your payment details and try again.' });
+        }
+
+        const insertBookingQuery = `
+            INSERT INTO bookings (user_id, session_id, payment_method, payment_status)
+            VALUES (?, ?, ?, 'completed')
+        `;
+        db.query(insertBookingQuery, [user_id, sessionId, paymentMethod], (err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error saving booking', error: err });
+            }
+            res.status(201).json({ message: 'Booking confirmed and payment successful' });
+        });
+    });
+});
+
+function processPayPal() {
+    // Implement PayPal processing logic here
+    console.log("Processing PayPal payment...");
+    return true;  // Simulate successful PayPal payment for now
+}
 
 
 module.exports = router;

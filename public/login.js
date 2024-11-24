@@ -45,13 +45,12 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password, captchaResponse }), // Send CAPTCHA response with login data
+            body: JSON.stringify({ email, password, captchaResponse }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            alert('Login successful');
             localStorage.setItem('authToken', data.token);
             window.location.href = 'index.html';
         } else {
