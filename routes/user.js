@@ -310,10 +310,13 @@ router.post('/book-session', verifyToken, (req, res) => {
 });
 
 function processPayPal() {
-    // Implement PayPal processing logic here
     console.log("Processing PayPal payment...");
-    return true;  // Simulate successful PayPal payment for now
+    return true; 
 }
 
+function processCreditCard(paymentDetails) {
+    console.log("Processing credit card payment with details:", paymentDetails);
+    return true; // Return 'false' if the payment fails
+}
 
 module.exports = router;
