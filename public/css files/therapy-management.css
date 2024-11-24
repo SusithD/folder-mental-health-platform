@@ -279,23 +279,23 @@ h1, h2 {
 
 /* Session Card Styling */
 .session-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); /* Creates responsive columns */
     gap: 30px;
-    justify-content: space-between;
     padding: 30px;
     width: 100%;
     box-sizing: border-box;
 }
 
+/* Session Card Styling */
 .session-card {
     background: #fff;
     padding: 20px;
     border-radius: 12px;
-    width: calc(50% - 20px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
 .session-card:hover {
