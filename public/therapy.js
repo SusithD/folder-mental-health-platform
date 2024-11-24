@@ -106,15 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             const popup = document.getElementById('session-details-popup');
             popup.querySelector('.popup-content').innerHTML = bookingForm;
-        
+
             // Fetch and display session details (e.g., therapist name, session date, and fees)
             fetchSessionDetails(sessionId);
-        
+
             // Add event listener for payment method selection
             document.getElementById('payment-method').addEventListener('change', (event) => {
                 const method = event.target.value;
                 const paymentDetailsDiv = document.getElementById('payment-details');
-        
+
                 if (method === 'credit-card') {
                     paymentDetailsDiv.innerHTML = `
                         <h4>Credit Card Details</h4>
@@ -134,44 +134,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }
             });
-        
+
             // Attach confirm booking functionality
             document.querySelector('.confirm-booking').addEventListener('click', () => confirmBooking(sessionId));
         }
-        
+
         // Function to fetch session details from the server
         function fetchSessionDetails(sessionId) {
             axios.get(`http://localhost:3000/api/user/sessions/${sessionId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(response => {
-                const session = response.data;
-                const { therapist_name, session_date, fees } = session;
-                // Display the fetched details in the form
-                document.getElementById('session-date').textContent = new Date(session_date).toLocaleDateString();
-                document.getElementById('therapist-name').textContent = therapist_name;
-                document.getElementById('session-fees').textContent = fees;
-            })
-            .catch(error => {
-                console.error('Error fetching session details:', error);
-                // Display a fallback error message if session details cannot be fetched
-                document.getElementById('session-date').textContent = 'Unavailable';
-                document.getElementById('therapist-name').textContent = 'Unavailable';
-                document.getElementById('session-fees').textContent = '0.00';
-            });
+                .then(response => {
+                    const session = response.data;
+                    const { therapist_name, session_date, fees } = session;
+                    // Display the fetched details in the form
+                    document.getElementById('session-date').textContent = new Date(session_date).toLocaleDateString();
+                    document.getElementById('therapist-name').textContent = therapist_name;
+                    document.getElementById('session-fees').textContent = fees;
+                })
+                .catch(error => {
+                    console.error('Error fetching session details:', error);
+                    // Display a fallback error message if session details cannot be fetched
+                    document.getElementById('session-date').textContent = 'Unavailable';
+                    document.getElementById('therapist-name').textContent = 'Unavailable';
+                    document.getElementById('session-fees').textContent = '0.00';
+                });
         }
-        
+
 
         function confirmBooking(sessionId) {
             const paymentMethod = document.getElementById('payment-method').value;
             const paymentDetails = {};
-        
+
             if (paymentMethod === 'credit-card') {
                 paymentDetails.cardNumber = document.getElementById('card-number').value;
                 paymentDetails.expiryDate = document.getElementById('expiry-date').value;
                 paymentDetails.cvv = document.getElementById('cvv').value;
             }
-        
+
             // Post booking and payment details to the server
             axios.post(
                 `http://localhost:3000/api/user/book-session`,
@@ -181,17 +181,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     paymentDetails,
                 },
                 {
-                    headers: { 'Authorization': `Bearer ${token}` }, 
+                    headers: { 'Authorization': `Bearer ${token}` },
                 }
             )
                 .then(response => {
                     const message = response.data.message;
-                    alert(message); // Show server success message
-                    document.getElementById('session-details-popup').classList.add('hidden');
+                    const popup = document.getElementById('session-details-popup');
+                    popup.querySelector('.popup-content').innerHTML = `
+            <h3>Session Successfully Booked!</h3>
+            <p>${message}</p>
+
+        `;
+                    // Optionally hide the "close" button or add any additional styling if necessary
+                    popup.classList.remove('hidden');
                 })
                 .catch(error => {
                     console.error('Error booking session:', error);
-        
+
                     // Display error message if available
                     if (error.response && error.response.data) {
                         alert(`Error: ${error.response.data.message}`);
@@ -200,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
         }
-        
+
         document.querySelector('#session-details-popup').addEventListener('click', (event) => {
             if (event.target.id === 'session-details-popup') {
                 document.getElementById('session-details-popup').classList.add('hidden');
@@ -213,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bookSession(sessionId);
             }
         });
-        
+
     } else {
         console.log("No token found in localStorage.");
         document.getElementById('session-list').innerHTML = '<p>Please log in to view your upcoming sessions.</p>';
