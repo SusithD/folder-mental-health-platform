@@ -222,5 +222,51 @@ router.get('/journals', verifyToken, (req, res) => {
     });
 });
 
+// Route to fetch all sessions
+router.get('/sessions', verifyToken, (req, res) => {
+    const userId = req.user.id;
+
+    const query = `
+        SELECT session_id, therapist_name, session_type, session_date, session_time, fees, description
+        FROM sessions
+        ORDER BY session_date DESC, session_time DESC`;
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length > 0) {
+            return res.json(results); // Return all sessions
+        } else {
+            return res.status(404).json({ message: 'No sessions found' });
+        }
+    });
+});
+
+// Route to fetch a single session by ID
+router.get('/sessions/:id', verifyToken, (req, res) => {
+    const sessionId = req.params.id;
+
+    const query = `
+        SELECT session_id, therapist_name, session_type, session_date, session_time, fees, description
+        FROM sessions
+        WHERE session_id = ?`;
+
+    db.query(query, [sessionId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length > 0) {
+            return res.json(results[0]); // Return the first (and only) session
+        } else {
+            return res.status(404).json({ message: 'Session not found' });
+        }
+    });
+});
+
 
 module.exports = router;

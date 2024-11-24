@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
 
+
 // Load environment variables
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+
 
 // Serve static files (like HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));

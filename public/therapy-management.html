@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Therapy Session Management</title>
-    <link rel="stylesheet" href="css files/dashboard.css">
+    <link rel="stylesheet" href="css files/therapy-management.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -26,40 +26,20 @@
         <!-- Main Content -->
         <main class="main-content">
             <section id="upcoming-sessions" class="section">
-                <h2>Upcoming Sessions</h2>
+                <h2>Upcoming Therapy Sessions</h2>
                 <div id="session-list" class="session-list">
-                    <!-- Placeholder for upcoming sessions -->
+                    <!-- Session Cards will be populated here -->
                 </div>
-            </section>
-
-            <section id="book-session" class="section">
-                <h2>Book a Session</h2>
-                <form id="session-form" class="session-form">
-                    <label for="therapist">Select Therapist:</label>
-                    <select id="therapist" required>
-                        <!-- Therapists will be dynamically loaded -->
-                    </select>
-
-                    <label for="session-type">Session Type:</label>
-                    <select id="session-type" required>
-                        <option value="in-person">In-Person</option>
-                        <option value="online">Online</option>
-                    </select>
-
-                    <label for="session-date">Select Date:</label>
-                    <input type="date" id="session-date" required>
-
-                    <label for="session-time">Select Time:</label>
-                    <input type="time" id="session-time" required>
-
-                    <label for="fees">Fees:</label>
-                    <p id="fees" class="fees-info">Loading...</p>
-
-                    <button type="submit" class="btn">Book Session</button>
-                </form>
-            </section>
+            </section>            
         </main>
     </div>
+
+    <!-- Popup for Session Details -->
+    <div id="session-details-popup" class="popup hidden">
+        <div class="popup-content">
+        </div>
+    </div>
+
 
     <script src="therapy.js"></script>
 </body>
