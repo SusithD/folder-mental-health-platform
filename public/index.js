@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Token:", token);
 
     if (token) {
-        // Fetch user profile
         axios.get('http://localhost:3000/api/user/profile', {
             headers: { 'Authorization': `Bearer ${token}` }
         })

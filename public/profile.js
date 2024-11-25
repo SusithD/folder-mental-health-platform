@@ -18,12 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Failed to load user profile.');
         });
         
-        // Fetch user profile
         axios.get('http://localhost:3000/api/user/user-details', {
             headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(response => {
-                // console.log("Response data:", response.data);
                 if (response.data && response.data.fullName) {
                     const user = response.data;
 
@@ -37,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('emergencyContact').textContent = user.emergencyContact || 'Not Provided';
                     document.getElementById('language').textContent = user.language || 'Not Provided';
 
-                    // Update profile image
                     if (user.profileImage) {
                         document.getElementById('profileImage').src = user.profileImage;
                     }
