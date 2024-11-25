@@ -27,10 +27,76 @@
                 <li><a href="#resources"><i class="fas fa-book"></i> Resources</a></li>
                 <li><a href="#support"><i class="fas fa-users"></i> Support</a></li>
             </ul>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div id="logout-popup" class="popup hidden">
+                <div class="popup-contentlo">
+                    <img src="assests/Images/logout.png" alt="Logout Illustration" class="popup-imagelo">
+                    <h5 class="centered-headinglo">Confirm Logout</h5>
+                    <p>You are about to log out of your account. Make sure to save your work before leaving.</p>
+                    <div class="popup-actions">
+                        <button id="logout-confirm" class="btn confirm">Yes, Log Me Out</button>
+                        <button id="logout-cancel" class="btn cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function logout() {
+                    const popup = document.getElementById("logout-popup");
+                    popup.classList.remove("hidden");
+                    document.getElementById("logout-confirm").onclick = function () {
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        window.location.href = 'login.html'
+                    };
+                    document.getElementById("logout-cancel").onclick = function () {
+                        popup.classList.add("hidden");
+                    };
+                }
+
+            </script>
         </nav>
 
         <!-- Main Content -->
         <main class="main-content">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <h1>Welcome Back, <span id="user-name">Loading...</span></h1>
+                    <p class="quote">Every day is a fresh start. Let's make it count.</p>
+                </div>
+                <div class="top-bar-right">
+                    <div class="icon-container">
+                        <button class="icon-button" title="Notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </button>
+                        <button class="icon-button" title="Messages">
+                            <i class="fas fa-envelope"></i>
+                            <span class="badge">5</span>
+                        </button>
+                        <a href="profile.html">
+                            <button class="profile-button">
+                                <img src="assests/Images/profile-placeholder.png" alt="Profile" class="profile-pic">
+                            </button>
+                        </a>                        
+                    </div>
+                </div>
+            </div>
+
+            <section id="hero" class="hero">
+                <div class="hero-content">
+                    <h1>Welcome to Mental Wellness</h1>
+                    <p>Empower your mind with tools for peace, mindfulness, and growth. Stay balanced, stay focused.</p>
+                    <div class="cta-buttons">
+                        <a href="#signup" class="btn btn-primary">Browse More</a>
+                        <a href="#features" class="btn btn-secondary">Book a Session</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assests/Images/undraw_i_can_fly_7egl.png" alt="Mindfulness and Relaxation">
+                </div>
+            </section>
+
             <section id="upcoming-sessions" class="section">
                 <h2>Upcoming Therapy Sessions</h2>
                 <div id="session-list" class="session-list">
