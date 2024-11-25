@@ -5,6 +5,7 @@ const db = require('../db');
 const axios = require('axios');
 const router = express.Router();
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 // Middleware to verify the JWT token
 const verifyToken = (req, res, next) => {
@@ -263,7 +264,7 @@ router.get('/sessions/:id', verifyToken, (req, res) => {
     });
 });
 
-router.post('/book-session', verifyToken, (req, res) => {
+router.post('/book-session', verifyToken, async (req, res) => {
     const { sessionId, paymentMethod, paymentDetails } = req.body;
     const user_id = req.user.id;
 
@@ -272,7 +273,7 @@ router.post('/book-session', verifyToken, (req, res) => {
     }
 
     const querySession = 'SELECT * FROM sessions WHERE session_id = ?';
-    db.query(querySession, [sessionId], (err, results) => {
+    db.query(querySession, [sessionId], async (err, results) => {
         if (err) {
             return res.status(500).json({ message: 'Error fetching session details', error: err });
         }
@@ -280,11 +281,13 @@ router.post('/book-session', verifyToken, (req, res) => {
             return res.status(404).json({ message: 'Session not found' });
         }
 
+        const session = results[0];
+
         let paymentSuccess = false;
         if (paymentMethod === 'credit-card' && paymentDetails) {
-            paymentSuccess = processCreditCard(paymentDetails); 
+            paymentSuccess = processCreditCard(paymentDetails);
         } else if (paymentMethod === 'paypal') {
-            paymentSuccess = processPayPal(); 
+            paymentSuccess = processPayPal();
         }
 
         if (!paymentSuccess) {
@@ -295,11 +298,91 @@ router.post('/book-session', verifyToken, (req, res) => {
             INSERT INTO bookings (user_id, session_id, payment_method, payment_status)
             VALUES (?, ?, ?, 'completed')
         `;
-        db.query(insertBookingQuery, [user_id, sessionId, paymentMethod], (err) => {
+        db.query(insertBookingQuery, [user_id, sessionId, paymentMethod], async (err) => {
             if (err) {
                 return res.status(500).json({ message: 'Error saving booking', error: err });
             }
-            res.status(201).json({ message: 'Booking confirmed and payment successful' });
+
+            try {
+                // Fetch user details for the email
+                const userQuery = 'SELECT email, fullName FROM users WHERE id = ?';
+                db.query(userQuery, [user_id], async (err, userResult) => {
+                    if (err || userResult.length === 0) {
+                        console.error('Error fetching user details:', err);
+                        return res.status(201).json({ 
+                            message: 'Booking confirmed and payment successful, but email notification failed.' 
+                        });
+                    }
+
+                    const { email, fullName } = userResult[0];
+
+                    // Send email notification
+                    const transporter = nodemailer.createTransport({
+                        host: process.env.EMAIL_SERVICE,
+                        port: 587,
+                        secure: false, 
+                        auth: {
+                            user: process.env.EMAIL_USER,
+                            pass: process.env.EMAIL_PASS,
+                        },
+                    });
+
+                    const mailOptions = {
+                        from: `"Mental Wellness Helper" <${process.env.EMAIL_USER}>`,
+                        to: email,
+                        subject: 'Your Session Booking Confirmation',
+                        html: `
+                            <div style="font-family: Arial, sans-serif; color: #333;">
+                                <p>Dear <strong>${fullName}</strong>,</p>
+                    
+                                <p>We are delighted to inform you that your session booking has been successfully confirmed! Below are the details of your session:</p>
+                    
+                                <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                                    <h3 style="margin-bottom: 10px; color: #007BFF;">Session Details</h3>
+                                    <ul style="list-style: none; padding: 0;">
+                                        <li><strong>Session ID:</strong> ${session.session_id}</li>
+                                        <li><strong>Therapist Name:</strong> ${session.therapist_name}</li>
+                                        <li><strong>Session Type:</strong> ${session.session_type}</li>
+                                        <li><strong>Session Fee:</strong> ${session.fees} (Paid)</li>
+                                        <li><strong>Date:</strong> ${session.session_date}</li>
+                                        <li><strong>Time:</strong> ${session.session_time}</li>
+                                        <li><strong>Payment Method:</strong> ${paymentMethod}</li>
+                                    </ul>
+                                </div>
+                    
+                                <p>Your therapist will be prepared to provide the best care and guidance during this session. Please make sure to arrive at least 10 minutes early for any pre-session preparations.</p>
+                    
+                                <p><strong>Need to reschedule or cancel?</strong><br>
+                                If you need to make changes to your booking, please contact us at least 24 hours in advance to avoid any cancellation fees. You can reach us at <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.</p>
+                    
+                                <p><strong>Reminder:</strong> If this is your first session with us, kindly ensure you complete any required pre-session forms sent to your email earlier.</p>
+                    
+                                <p>If you have any questions or require further assistance, feel free to contact our support team. We’re here to help!</p>
+                    
+                                <p>Thank you for choosing Mental Wellness Helper. We look forward to supporting you on your journey to better mental health.</p>
+                    
+                                <p>Warm regards,<br>
+                                <strong>The Mental Wellness Helper Team</strong></p>
+                    
+                                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                                <p style="font-size: 12px; color: #555;">
+                                    This is an automated message. Please do not reply to this email. For inquiries, reach out to our support team at 
+                                    <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.
+                                </p>
+                            </div>
+                        `,
+                    };
+                    
+
+                    await transporter.sendMail(mailOptions);
+                    res.status(201).json({ message: 'Booking confirmed, payment successful, and email sent' });
+                });
+            } catch (emailError) {
+                console.error('Error sending email:', emailError);
+                res.status(201).json({ 
+                    message: 'Booking confirmed and payment successful, but email notification failed.' 
+                });
+            }
         });
     });
 });
@@ -366,7 +449,83 @@ router.delete('/booked-sessions/:sessionId', verifyToken, (req, res) => {
             return res.status(404).json({ message: 'Session not found or already cancelled' });
         }
 
-        res.json({ message: 'Session cancelled successfully' });
+        // Fetch the session details for email
+        const sessionQuery = 'SELECT * FROM sessions WHERE session_id = ?';
+        db.query(sessionQuery, [sessionId], (err, sessionResult) => {
+            if (err) {
+                console.error('Error fetching session details:', err);
+                return res.status(500).json({ message: 'Error fetching session details' });
+            }
+
+            if (sessionResult.length === 0) {
+                return res.status(404).json({ message: 'Session not found' });
+            }
+
+            const session = sessionResult[0];
+            const email = req.user.email;  // User's email
+            const fullName = req.user.fullName; // User's full name
+
+            // Create the email content
+            const mailOptions = {
+                from: `"Mental Wellness Helper" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: 'Your Session Cancellation Confirmation',
+                html: `
+                    <div style="font-family: Arial, sans-serif; color: #333;">
+                        <p>Dear <strong>${fullName}</strong>,</p>
+
+                        <p>We are writing to confirm that your session booking has been successfully cancelled. Below are the details of the cancelled session:</p>
+
+                        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                            <h3 style="margin-bottom: 10px; color: #007BFF;">Cancelled Session Details</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li><strong>Session ID:</strong> ${sessionId}</li>
+                                <li><strong>Therapist Name:</strong> ${session.therapist_name}</li>
+                                <li><strong>Session Type:</strong> ${session.session_type}</li>
+                                <li><strong>Session Fee:</strong> ${session.fees}</li>
+                                <li><strong>Date:</strong> ${session.session_date}</li>
+                                <li><strong>Time:</strong> ${session.session_time}</li>
+                            </ul>
+                        </div>
+
+                        <p>We understand that plans can change, and we hope to have the opportunity to reschedule your session at a more convenient time. Should you wish to book a new session, please visit our platform or contact us directly for assistance.</p>
+
+                        <p><strong>Need assistance or have questions?</strong><br>If you have any further inquiries or if you'd like to reschedule, please feel free to reach out to us at <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.</p>
+
+                        <p>Thank you for choosing Mental Wellness Helper. We are here to support you on your mental health journey, and we look forward to connecting with you soon.</p>
+
+                        <p>Warm regards,<br>
+                        <strong>The Mental Wellness Helper Team</strong></p>
+
+                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                        <p style="font-size: 12px; color: #555;">
+                            This is an automated message. Please do not reply to this email. For inquiries, reach out to our support team at 
+                            <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.
+                        </p>
+                    </div>
+                `,
+            };
+
+            // Send the cancellation confirmation email
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+                },
+            });
+
+            transporter.sendMail(mailOptions, (emailErr, info) => {
+                if (emailErr) {
+                    console.error('Error sending email:', emailErr);
+                    return res.status(500).json({ message: 'Error sending confirmation email' });
+                }
+
+                console.log('Email sent: ' + info.response);
+                // Respond to the user
+                res.json({ message: 'Session cancelled successfully and confirmation email sent' });
+            });
+        });
     });
 });
 
