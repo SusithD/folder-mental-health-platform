@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Failed to load user profile.');
         });
 
-        // Fetch latest assessment
         const resultElement = document.getElementById('assessment-result');
         axios.get('http://localhost:3000/api/user/assessment-result', {
             headers: { 'Authorization': `Bearer ${token}` }

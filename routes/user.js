@@ -309,6 +309,28 @@ router.post('/book-session', verifyToken, (req, res) => {
     });
 });
 
+router.get('/user-details', verifyToken, (req, res) => {
+    const userId = req.user.id; 
+
+    const query = `
+        SELECT fullName, email, dob, gender, phone, emergencyContact, language
+        FROM users
+        WHERE id = ?`; 
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length > 0) {
+            return res.json(results[0]); 
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    });
+});
+
 function processPayPal() {
     console.log("Processing PayPal payment...");
     return true; 
