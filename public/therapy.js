@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Token:", token);
 
     if (token) {
-        // Fetch upcoming sessions
+
         axios.get('http://localhost:3000/api/user/sessions', {
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sessionListElement = document.getElementById('session-list');
                 sessionListElement.innerHTML = '';
 
-                // Loop through sessions and create session cards
+
                 sessions.forEach(session => {
                     const { therapist_name, session_date, session_time, session_type, description, session_id } = session;
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionListElement.appendChild(sessionCard);
                 });
 
-                // Attach event listener to the session list container (event delegation)
+
                 document.getElementById('session-list').addEventListener('click', (event) => {
                     if (event.target.classList.contains('view-details')) {
                         const sessionId = event.target.getAttribute('data-session-id');

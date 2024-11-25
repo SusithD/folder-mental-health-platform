@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <script>
                 function logout() {
                     const popup = document.getElementById("logout-popup");
@@ -56,16 +56,32 @@
 
         <!-- Main Dashboard -->
         <main class="main-content">
-            <!-- Welcome Section -->
-            <section id="welcome" class="section welcome">
-                <h1>Good Morning, <span id="user-name">Loading...</span></h1>
-                <p>"Every day is a fresh start. Let's make it count."</p>
-            </section>
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <h1>Welcome Back, <span id="user-name">Loading...</span></h1>
+                    <p class="quote">Every day is a fresh start. Let's make it count.</p>
+                </div>
+                <div class="top-bar-right">
+                    <div class="icon-container">
+                        <button class="icon-button" title="Notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </button>
+                        <button class="icon-button" title="Messages">
+                            <i class="fas fa-envelope"></i>
+                            <span class="badge">5</span>
+                        </button>
+                        <button class="profile-button">
+                            <img src="assests/Images/profile-placeholder.png" alt="Profile" class="profile-pic">
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Slideshow Section -->
             <section id="slideshow" class="slideshow">
                 <div class="single-image-container">
-                    <img src="assests/Images/drew-bae-g3nnb9WXlIE-unsplash.jpg" style="width:100%"
-                        alt="Mindfulness and Relaxation">
+                    <img src="assests/Images/drew-bae-g3nnb9WXlIE-unsplash.jpg" alt="Mindfulness and Relaxation">
                 </div>
             </section>
 
