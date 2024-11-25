@@ -5,6 +5,7 @@ const db = require('../db');
 const axios = require('axios'); 
 const router = express.Router();
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 
 // Register Route
@@ -48,7 +49,7 @@ router.post('/register', async (req, res) => {
       }
 
       // Hash password
-      bcrypt.hash(password, 10, (err, hashedPassword) => {
+      bcrypt.hash(password, 10, async (err, hashedPassword) => {
         if (err) {
           console.error(err);
           return res.status(500).json({ message: 'Server error' });
@@ -60,13 +61,38 @@ router.post('/register', async (req, res) => {
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         
-        db.query(insertUserQuery, [fullName, email, hashedPassword, dob, gender, phone, emergencyContact, role || 'user', language, securityQuestion, securityAnswer], (err, result) => {
+        db.query(insertUserQuery, [fullName, email, hashedPassword, dob, gender, phone, emergencyContact, role || 'user', language, securityQuestion, securityAnswer], async (err, result) => {
           if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Error saving user' });
           }
 
-          res.status(201).json({ message: 'User registered successfully' });
+          // Send Welcome Email
+          try {
+            const transporter = nodemailer.createTransport({
+              host: process.env.EMAIL_SERVICE,
+              port: 587,
+              secure: false, // true for 465, false for other ports
+              auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS, 
+              },
+            });
+
+            const mailOptions = {
+              from: `"Mental Wellness Helper" <${process.env.EMAIL_USER}>`,
+              to: email,
+              subject: 'Welcome to Mental Wellness Helper',
+              text: `Dear ${fullName},\n\nThank you for signing up with Mental Wellness Helper. We are excited to have you on board.\n\nBest Regards,\nThe Mental Wellness Helper Team`,
+              html: `<p>Dear ${fullName},</p><p>Thank you for signing up with <b>Mental Wellness Helper</b>. We are excited to have you on board.</p><p>Best Regards,<br>The Mental Wellness Helper Team</p>`,
+            };
+
+            await transporter.sendMail(mailOptions);
+            res.status(201).json({ message: 'User registered successfully and welcome email sent' });
+          } catch (emailError) {
+            console.error('Error sending welcome email:', emailError);
+            res.status(201).json({ message: 'User registered successfully but failed to send email' });
+          }
         });
       });
     });
