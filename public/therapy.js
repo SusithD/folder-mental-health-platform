@@ -6,6 +6,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (token) {
 
+        fetchBookedSessions(token);
+
+        axios.get('http://localhost:3000/api/user/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => {
+            console.log(response.data);
+            document.getElementById('user-name').textContent = response.data.fullName;
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+            alert('Failed to load user profile.');
+        });
+        
         axios.get('http://localhost:3000/api/user/sessions', {
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -161,6 +175,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         }
 
+        function fetchBookedSessions(token) {
+            axios.get('http://localhost:3000/api/user/booked-sessions', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+                .then(response => {
+                    const sessions = response.data;
+                    const bookedSessionList = document.getElementById('booked-session-list');
+                    bookedSessionList.innerHTML = '';
+        
+                    if (sessions.length === 0) {
+                        bookedSessionList.innerHTML = '<p>No booked sessions available.</p>';
+                    } else {
+                        sessions.forEach(session => {
+                            const { therapist_name, session_date, session_time, session_type, session_id } = session;
+        
+                            const sessionCard = document.createElement('div');
+                            sessionCard.classList.add('session-card');
+                            sessionCard.innerHTML = `
+                                <h3>Therapy with ${therapist_name}</h3>
+                                <p><strong>Date:</strong> ${new Date(session_date).toLocaleDateString()}</p>
+                                <p><strong>Time:</strong> ${session_time}</p>
+                                <p><strong>Type:</strong> ${session_type}</p>
+                                <button class="btn cancel-session" data-session-id="${session_id}">Cancel</button>
+                            `;
+                            bookedSessionList.appendChild(sessionCard);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching booked sessions:', error);
+                    document.getElementById('booked-session-list').innerHTML = '<p>Error fetching booked sessions.</p>';
+                });
+        }
+
+        function cancelSession(sessionId, token) {
+            if (confirm("Are you sure you want to cancel this session?")) {
+                axios.delete(`http://localhost:3000/api/user/booked-sessions/${sessionId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                    .then(() => {
+                        alert("Session cancelled successfully.");
+                        fetchBookedSessions(token);
+                    })
+                    .catch(error => {
+                        console.error('Error cancelling session:', error);
+                        alert("Failed to cancel the session. Please try again.");
+                    });
+            }
+        }
 
         function confirmBooking(sessionId) {
             const paymentMethod = document.getElementById('payment-method').value;
@@ -217,6 +280,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.target.classList.contains('book-session')) {
                 const sessionId = event.target.getAttribute('data-session-id');
                 bookSession(sessionId);
+            }
+        });
+
+        // Add event listener for cancelling sessions
+        document.getElementById('booked-session-list').addEventListener('click', (event) => {
+            if (event.target.classList.contains('cancel-session')) {
+                const sessionId = event.target.getAttribute('data-session-id');
+                cancelSession(sessionId, token);
             }
         });
 

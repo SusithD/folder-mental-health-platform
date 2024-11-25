@@ -5,6 +5,19 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Token:", token);
 
     if (token) {
+        
+        axios.get('http://localhost:3000/api/user/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => {
+            console.log(response.data);
+            document.getElementById('user-name').textContent = response.data.fullName;
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+            alert('Failed to load user profile.');
+        });
+        
         // Fetch user profile
         axios.get('http://localhost:3000/api/user/user-details', {
             headers: { 'Authorization': `Bearer ${token}` }

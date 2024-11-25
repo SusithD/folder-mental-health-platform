@@ -684,7 +684,7 @@ h1, h2 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 80vh;
+    height: 60vh;
     padding: 0 3rem;
     background: #ffffff;
     background-size: cover;
@@ -703,14 +703,14 @@ h1, h2 {
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-size: 50px;
+    font-weight: 00;
     color: #2c2c2c;
     margin-bottom: 20px;
 }
 
 .hero p {
-    font-size: 1.5rem;
+    font-size: 18px;
     line-height: 1.8;
     margin-bottom: 30px;
 }
@@ -753,9 +753,11 @@ h1, h2 {
 
 /* Hero Image */
 .hero-image img {
-    max-width: 100%;
+    max-width: 90%;
     height: auto;
     border-radius: 10px;
+    display: block;
+    align-items: center;
 }
 
 /* Mobile Responsiveness */

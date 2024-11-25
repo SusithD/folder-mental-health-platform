@@ -8,7 +8,7 @@ require('dotenv').config();
 
 // Middleware to verify the JWT token
 const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
+    const token = req.headers['authorization']?.split(' ')[1]; 
 
     if (!token) {
         return res.status(403).json({ message: 'Access denied' });
@@ -19,7 +19,6 @@ const verifyToken = (req, res, next) => {
             return res.status(401).json({ message: 'Invalid token' });
         }
 
-        // Attach the decoded user info to the request object
         req.user = decoded;
         next();
     });
@@ -28,7 +27,7 @@ const verifyToken = (req, res, next) => {
 // Route to get the user's profile details
 router.get('/profile', verifyToken, (req, res) => {
     console.log("Received request for /profile");
-    const userId = req.user.id;  // Get the user's ID from the decoded token
+    const userId = req.user.id;  
 
     // Query the database to get the user's full name
     const query = 'SELECT fullName FROM users WHERE id = ?';
@@ -50,17 +49,14 @@ router.get('/profile', verifyToken, (req, res) => {
 router.post('/assessments', verifyToken, (req, res) => {
     const { stress_level, energy_level, happiness_level } = req.body;
 
-    // Use user_id from decoded token
     const user_id = req.user.id;
 
     if (!stress_level || !energy_level || !happiness_level) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Calculate the score (for simplicity, average the three levels)
     const score = (parseInt(stress_level) + parseInt(energy_level) + parseInt(happiness_level)) / 3;
 
-    // Insert the assessment into the database
     const query = 'INSERT INTO assessments (user_id, stress_level, energy_level, happiness_level, score) VALUES (?, ?, ?, ?, ?)';
     db.query(query, [user_id, stress_level, energy_level, happiness_level, score], (err, result) => {
         if (err) {
@@ -79,7 +75,7 @@ router.get('/assessment-result', verifyToken, (req, res) => {
         FROM assessments
         WHERE user_id = ?
         ORDER BY created_at DESC
-        LIMIT 1`; // Fetch the latest assessment
+        LIMIT 1`; 
 
     db.query(query, [userId], (err, results) => {
         if (err) {
@@ -88,7 +84,7 @@ router.get('/assessment-result', verifyToken, (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.json(results[0]); // Return the latest assessment
+            return res.json(results[0]); 
         } else {
             return res.status(404).json({ message: 'No assessments found' });
         }
@@ -105,7 +101,6 @@ router.post('/sleep', verifyToken, (req, res) => {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Insert the sleep data into the database
     const query = 'INSERT INTO sleep_data (user_id, average_sleep, recommended_sleep, last_night_sleep, sleep_quality, deep_sleep, sleep_consistency, sleep_goal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(query, [user_id, average_sleep, recommended_sleep, last_night_sleep, sleep_quality, deep_sleep, sleep_consistency, sleep_goal], (err, result) => {
         if (err) {
@@ -124,7 +119,7 @@ router.get('/sleep-data', verifyToken, (req, res) => {
         FROM sleep_data
         WHERE user_id = ?
         ORDER BY created_at DESC
-        LIMIT 1`; // Fetch the latest sleep data
+        LIMIT 1`; 
 
     db.query(query, [userId], (err, results) => {
         if (err) {
@@ -133,7 +128,7 @@ router.get('/sleep-data', verifyToken, (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.json(results[0]); // Return the latest sleep data
+            return res.json(results[0]); 
         } else {
             return res.status(404).json({ message: 'No sleep data found' });
         }
@@ -238,7 +233,7 @@ router.get('/sessions', verifyToken, (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.json(results); // Return all sessions
+            return res.json(results); 
         } else {
             return res.status(404).json({ message: 'No sessions found' });
         }
@@ -261,7 +256,7 @@ router.get('/sessions/:id', verifyToken, (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.json(results[0]); // Return the first (and only) session
+            return res.json(results[0]); 
         } else {
             return res.status(404).json({ message: 'Session not found' });
         }
@@ -287,9 +282,9 @@ router.post('/book-session', verifyToken, (req, res) => {
 
         let paymentSuccess = false;
         if (paymentMethod === 'credit-card' && paymentDetails) {
-            paymentSuccess = processCreditCard(paymentDetails); // Actual integration required
+            paymentSuccess = processCreditCard(paymentDetails); 
         } else if (paymentMethod === 'paypal') {
-            paymentSuccess = processPayPal(); // Actual integration required
+            paymentSuccess = processPayPal(); 
         }
 
         if (!paymentSuccess) {
@@ -331,6 +326,51 @@ router.get('/user-details', verifyToken, (req, res) => {
     });
 });
 
+// Route to fetch booked sessions for the authenticated user
+router.get('/booked-sessions', verifyToken, (req, res) => {
+    const userId = req.user.id; // Extract user ID from the token
+
+    const query = `
+        SELECT bs.id AS booking_id, s.therapist_name, s.session_date, s.session_time, s.session_type, s.session_id
+        FROM bookings AS bs
+        INNER JOIN sessions AS s ON bs.session_id = s.session_id
+        WHERE bs.user_id = ?
+        ORDER BY s.session_date DESC, s.session_time DESC`;
+    
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching booked sessions:', err);
+            return res.status(500).json({ message: 'Error fetching booked sessions' });
+        }
+
+        res.json(results);
+    });
+});
+
+// Route to cancel a booked session for the authenticated user
+router.delete('/booked-sessions/:sessionId', verifyToken, (req, res) => {
+    const userId = req.user.id; // Extract user ID from the token
+    const sessionId = req.params.sessionId; // Extract the session ID from the request parameters
+
+    const query = `
+        DELETE FROM bookings
+        WHERE user_id = ? AND session_id = ?`;
+    
+    db.query(query, [userId, sessionId], (err, result) => {
+        if (err) {
+            console.error('Error cancelling booked session:', err);
+            return res.status(500).json({ message: 'Error cancelling booked session' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Session not found or already cancelled' });
+        }
+
+        res.json({ message: 'Session cancelled successfully' });
+    });
+});
+
+
 function processPayPal() {
     console.log("Processing PayPal payment...");
     return true; 
@@ -338,7 +378,7 @@ function processPayPal() {
 
 function processCreditCard(paymentDetails) {
     console.log("Processing credit card payment with details:", paymentDetails);
-    return true; // Return 'false' if the payment fails
+    return true;
 }
 
 module.exports = router;
