@@ -30,7 +30,6 @@ router.get('/profile', verifyToken, (req, res) => {
     console.log("Received request for /profile");
     const userId = req.user.id;  
 
-    // Query the database to get the user's full name
     const query = 'SELECT fullName FROM users WHERE id = ?';
     db.query(query, [userId], (err, result) => {
         if (err) {
@@ -411,7 +410,7 @@ router.get('/user-details', verifyToken, (req, res) => {
 
 // Route to fetch booked sessions for the authenticated user
 router.get('/booked-sessions', verifyToken, (req, res) => {
-    const userId = req.user.id; // Extract user ID from the token
+    const userId = req.user.id; 
 
     const query = `
         SELECT bs.id AS booking_id, s.therapist_name, s.session_date, s.session_time, s.session_type, s.session_id
@@ -432,8 +431,8 @@ router.get('/booked-sessions', verifyToken, (req, res) => {
 
 // Route to cancel a booked session for the authenticated user
 router.delete('/booked-sessions/:sessionId', verifyToken, (req, res) => {
-    const userId = req.user.id; // Extract user ID from the token
-    const sessionId = req.params.sessionId; // Extract the session ID from the request parameters
+    const userId = req.user.id; 
+    const sessionId = req.params.sessionId; 
 
     const query = `
         DELETE FROM bookings
