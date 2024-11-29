@@ -88,89 +88,109 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handling form submissions
     const assessmentForm = document.getElementById('assessment-form');
-    assessmentForm.addEventListener('submit', (event) => {
-        event.preventDefault();
+assessmentForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-        const stressLevel = document.getElementById('stress-level').value;
-        const energyLevel = document.getElementById('energy-level').value;
-        const happinessLevel = document.getElementById('happiness-level').value;
+    // Sanitize input function
 
-        const payload = {
-            stress_level: stressLevel,
-            energy_level: energyLevel,
-            happiness_level: happinessLevel
-        };
 
-        axios.post('http://localhost:3000/api/user/assessments', payload, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        })
-        .then(response => {
-            document.getElementById('assessment-result').textContent = 'Assessment submitted successfully!';
-        })
-        .catch(error => {
-            console.error('Error submitting assessment:', error);
-            document.getElementById('assessment-result').textContent = 'Error submitting assessment.';
-        });
+    // Retrieve and sanitize inputs
+    const stressLevel = sanitizeInput(document.getElementById('stress-level').value);
+    const energyLevel = sanitizeInput(document.getElementById('energy-level').value);
+    const happinessLevel = sanitizeInput(document.getElementById('happiness-level').value);
+
+    const payload = {
+        stress_level: stressLevel,
+        energy_level: energyLevel,
+        happiness_level: happinessLevel
+    };
+
+    axios.post('http://localhost:3000/api/user/assessments', payload, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+        document.getElementById('assessment-result').textContent = 'Assessment submitted successfully!';
+    })
+    .catch(error => {
+        console.error('Error submitting assessment:', error);
+        document.getElementById('assessment-result').textContent = 'Error submitting assessment.';
     });
+});
 
-    const sleepForm = document.getElementById('sleep-form');
-    sleepForm.addEventListener('submit', (event) => {
-        event.preventDefault();
 
-        const averageSleep = document.getElementById('average-sleep').value;
-        const recommendedSleep = document.getElementById('recommended-sleep').value;
-        const lastNightSleep = document.getElementById('last-night-sleep').value;
-        const sleepQuality = document.getElementById('sleep-quality').value;
-        const deepSleep = document.getElementById('deep-sleep').value;
-        const sleepConsistency = document.getElementById('sleep-consistency').value;
-        const sleepGoal = document.getElementById('sleep-goal').value;
+    // Sanitize input function
+    function sanitizeInput(input) {
+        return input
+            .replace(/&/g, '&amp;')   // Replace & with &amp;
+            .replace(/</g, '&lt;')   // Replace < with &lt;
+            .replace(/>/g, '&gt;')   // Replace > with &gt;
+            .replace(/"/g, '&quot;') // Replace " with &quot;
+            .replace(/'/g, '&#39;'); // Replace ' with &#39;
+    }
 
-        const payload = {
-            average_sleep: averageSleep,
-            recommended_sleep: recommendedSleep,
-            last_night_sleep: lastNightSleep,
-            sleep_quality: sleepQuality,
-            deep_sleep: deepSleep,
-            sleep_consistency: sleepConsistency,
-            sleep_goal: sleepGoal
-        };
+// Sleep form submission
+const sleepForm = document.getElementById('sleep-form');
+sleepForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-        axios.post('http://localhost:3000/api/user/sleep', payload, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        })
-        .then(response => {
-            document.getElementById('sleep-result').textContent = 'Sleep data submitted successfully!';
-        })
-        .catch(error => {
-            console.error('Error submitting sleep data:', error);
-            document.getElementById('sleep-result').textContent = 'Error submitting sleep data.';
-        });
+    // Sanitize inputs
+    const averageSleep = sanitizeInput(document.getElementById('average-sleep').value);
+    const recommendedSleep = sanitizeInput(document.getElementById('recommended-sleep').value);
+    const lastNightSleep = sanitizeInput(document.getElementById('last-night-sleep').value);
+    const sleepQuality = sanitizeInput(document.getElementById('sleep-quality').value);
+    const deepSleep = sanitizeInput(document.getElementById('deep-sleep').value);
+    const sleepConsistency = sanitizeInput(document.getElementById('sleep-consistency').value);
+    const sleepGoal = sanitizeInput(document.getElementById('sleep-goal').value);
+
+    const payload = {
+        average_sleep: averageSleep,
+        recommended_sleep: recommendedSleep,
+        last_night_sleep: lastNightSleep,
+        sleep_quality: sleepQuality,
+        deep_sleep: deepSleep,
+        sleep_consistency: sleepConsistency,
+        sleep_goal: sleepGoal
+    };
+
+    axios.post('http://localhost:3000/api/user/sleep', payload, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+        document.getElementById('sleep-result').textContent = 'Sleep data submitted successfully!';
+    })
+    .catch(error => {
+        console.error('Error submitting sleep data:', error);
+        document.getElementById('sleep-result').textContent = 'Error submitting sleep data.';
     });
+});
 
-    const activityForm = document.getElementById('activity-form');
-    activityForm.addEventListener('submit', (event) => {
-        event.preventDefault();
+// Activity form submission
+const activityForm = document.getElementById('activity-form');
+activityForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-        const stepsToday = document.getElementById('steps-today').value;
+    // Sanitize input
+    const stepsToday = sanitizeInput(document.getElementById('steps-today').value);
 
-        const payload = {
-            steps_per_day: stepsToday,
-            calories_burned: Math.floor(stepsToday * 0.04),
-            active_days: Math.min(7, Math.ceil(stepsToday / 10000)),
-            most_active_day: 'Today',
-            inactive_days: 'None',
-            weekly_goal: 'Reach 70,000 steps (10,000/day)'
-        };
+    const payload = {
+        steps_per_day: stepsToday,
+        calories_burned: Math.floor(stepsToday * 0.04),
+        active_days: Math.min(7, Math.ceil(stepsToday / 10000)),
+        most_active_day: 'Today',
+        inactive_days: 'None',
+        weekly_goal: 'Reach 70,000 steps (10,000/day)'
+    };
 
-        axios.post('http://localhost:3000/api/user/activity', payload, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        })
-        .then(response => {
-            document.getElementById('activity-status').textContent = 'Activity data submitted successfully!';
-        })
-        .catch(error => {
-            console.error('Error submitting activity data:', error);
-            document.getElementById('activity-status').textContent = 'Error submitting activity data.';
-        });
+    axios.post('http://localhost:3000/api/user/activity', payload, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+        document.getElementById('activity-status').textContent = 'Activity data submitted successfully!';
+    })
+    .catch(error => {
+        console.error('Error submitting activity data:', error);
+        document.getElementById('activity-status').textContent = 'Error submitting activity data.';
     });
+});
+
 });
