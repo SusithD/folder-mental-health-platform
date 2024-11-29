@@ -362,13 +362,7 @@ router.post('/login', async (req, res) => {
                       If this login activity was initiated by you, no further action is required. However, if you suspect any unauthorized access to your account, 
                       we recommend securing your account immediately by resetting your password. You can do so by clicking the link below:
                   </p>
-      
-                  <p style="text-align: center; margin: 20px 0;">
-                      <a href="${resetPasswordLink}" style="padding: 10px 20px; font-size: 16px; color: #fff; text-decoration: none; background-color: #007BFF; border-radius: 5px;">
-                          Reset Password
-                      </a>
-                  </p>
-      
+
                   <p>For any assistance or to report unusual activity, feel free to contact our support team at 
                       <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.
                   </p>
