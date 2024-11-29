@@ -1,17 +1,3 @@
-Yes, you can use **phpMyAdmin** to create and manage the database for your project. It's a user-friendly tool for interacting with MySQL databases. Here's how to proceed step by step:
-
----
-
-### **Step 1: Set Up phpMyAdmin**
-1. **Install XAMPP or WAMP (if not already installed):**
-   - XAMPP: Includes Apache, PHP, and MySQL, along with phpMyAdmin.
-   - Download from [XAMPP official website](https://www.apachefriends.org/index.html).
-   - Start the **Apache** and **MySQL** services using the XAMPP control panel.
-
-2. **Access phpMyAdmin:**
-   - Open your browser and go to `http://localhost/phpmyadmin`.
-
----
 
 ### **Step 2: Create the Database**
 1. **Create a New Database:**
@@ -159,6 +145,3 @@ ADD COLUMN securityAnswer VARCHAR(255) NOT NULL;
    ```
 
 ---
-
-### **Next Steps**
-- Let me know once your database is set up, and we can move on to implementing specific features, starting with **User Registration**! 🚀
