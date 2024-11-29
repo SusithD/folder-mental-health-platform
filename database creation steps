@@ -62,16 +62,16 @@ ADD COLUMN securityAnswer VARCHAR(255) NOT NULL;
 
 3. **Create `sessions` Table:**
    ```sql
-   CREATE TABLE sessions (
-     id INT AUTO_INCREMENT PRIMARY KEY,
-     user_id INT,
-     counselor_id INT,
-     date DATETIME,
-     fee DECIMAL(10, 2),
-     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-     FOREIGN KEY (user_id) REFERENCES users(id),
-     FOREIGN KEY (counselor_id) REFERENCES users(id)
-   );
+CREATE TABLE sessions (
+    session_id INT AUTO_INCREMENT PRIMARY KEY,
+    therapist_name VARCHAR(255) NOT NULL,
+    session_type ENUM('in-person', 'online') NOT NULL,
+    session_date DATE NOT NULL,
+    session_time TIME NOT NULL,
+    fees DECIMAL(10, 2) NOT NULL,
+    description TEXT
+);
+
    ```
 
 4. **Create `chats` Table:**
@@ -171,5 +171,40 @@ CREATE TABLE sleep_data (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE assessments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    stress_level INT,
+    energy_level INT,
+    happiness_level INT,
+    score DECIMAL(5,2),  -- Allow for decimal score
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE  -- Optional: Cascade delete user assessments
+);
 
+CREATE TABLE activity_data (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    steps_per_day INT NOT NULL,
+    calories_burned INT NOT NULL,
+    active_days INT NOT NULL,
+    most_active_day VARCHAR(255) NOT NULL,
+    inactive_days VARCHAR(255) NOT NULL,
+    weekly_goal VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+INSERT INTO sessions (therapist_name, session_type, session_date, session_time, fees, description)
+VALUES
+('Dr. Nadeesha Perera', 'online', '2024-11-25', '15:00:00', 1500.00, 'A personalised therapy session to discuss your mental health and well-being, focusing on the challenges faced in Sri Lankan society.'),
+('Dr. Kumari Jayasinghe', 'in-person', '2024-11-26', '13:00:00', 1200.00, 'A therapy session focusing on stress management and relaxation techniques tailored for the Sri Lankan work environment.'),
+('Dr. Chathura Senanayake', 'online', '2024-11-27', '10:00:00', 1800.00, 'An in-depth session for cognitive behavioral therapy (CBT) to address depression and anxiety, common issues faced by many in Sri Lanka.'),
+('Dr. Samanthi Silva', 'in-person', '2024-11-28', '14:00:00', 1600.00, 'A therapy session dedicated to trauma recovery and support for those dealing with the aftermath of civil conflict or personal trauma in Sri Lanka.'),
+('Dr. Priyani Rajapaksha', 'online', '2024-11-29', '16:00:00', 1400.00, 'A session focusing on anxiety and depression management strategies, commonly sought by individuals in Sri Lanka due to societal pressures.'),
+('Dr. Ruwan Wijesinghe', 'in-person', '2024-11-30', '09:00:00', 1500.00, 'A session focusing on relationship therapy and conflict resolution, especially in the context of Sri Lankan family dynamics.'),
+('Dr. Anjali Fernando', 'online', '2024-12-01', '11:00:00', 1300.00, 'A session focused on self-esteem and personal development, addressing the cultural and societal barriers that hinder self-worth in Sri Lanka.'),
+('Dr. Lakshman Perera', 'in-person', '2024-12-02', '12:00:00', 1750.00, 'A therapy session designed for addiction recovery and emotional health, focusing on substance abuse issues prevalent in Sri Lanka.'),
+('Dr. Harini Gooneratne', 'online', '2024-12-03', '18:00:00', 1200.00, 'A mindfulness-based therapy session to reduce stress and anxiety, tailored to Sri Lankan professionals dealing with work-life balance challenges.'),
+('Dr. Nirmala Jayawardene', 'in-person', '2024-12-04', '10:00:00', 1600.00, 'A therapy session focused on parenting strategies and family therapy, offering advice and support in the context of Sri Lankan family structures.');
 ---
