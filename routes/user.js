@@ -27,7 +27,15 @@ const verifyToken = (req, res, next) => {
 
 // Route to get the user's profile details
 // Function to sanitize user input by escaping potentially dangerous characters
-
+function sanitizeInput(input) {
+    if (typeof input !== 'string') return input;
+    return input
+        .replace(/&/g, '&amp;')   // Replace & with &amp;
+        .replace(/</g, '&lt;')    // Replace < with &lt;
+        .replace(/>/g, '&gt;')    // Replace > with &gt;
+        .replace(/"/g, '&quot;')  // Replace " with &quot;
+        .replace(/'/g, '&#39;');  // Replace ' with &#39;
+}
 
 router.get('/profile', verifyToken, (req, res) => {
     console.log("Received request for /profile");
