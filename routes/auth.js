@@ -6,6 +6,7 @@ const axios = require('axios');
 const router = express.Router();
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const Joi = require('joi');
 
 
 // Register Route
@@ -19,6 +20,68 @@ router.post('/register', async (req, res) => {
   // CAPTCHA Secret Key (replace with your actual secret key)
   const CAPTCHA_SECRET_KEY = process.env.CAPTCHA_SECRET_KEY;
 
+  const registerValidationSchema = Joi.object({
+    fullName: Joi.string().min(3).max(100).required().messages({
+      'string.empty': 'Full name is required.',
+      'string.min': 'Full name must be at least 3 characters long.',
+    }),
+    email: Joi.string().email().required().messages({
+      'string.email': 'A valid email address is required.',
+      'string.empty': 'Email is required.',
+    }),
+    password: Joi.string().min(6).required().messages({
+      'string.empty': 'Password is required.',
+      'string.min': 'Password must be at least 6 characters long.',
+    }), 
+    dob: Joi.date().iso().required().messages({
+      'date.base': 'A valid date of birth is required.',
+      'any.required': 'Date of birth is required.',
+    }),
+    gender: Joi.string().valid('male', 'female', 'other').required().messages({
+      'any.only': 'Gender must be male, female, or other.',
+    }),
+    phone: Joi.string()
+      .pattern(/^[0-9]{10}$/)
+      .required()
+      .messages({
+        'string.pattern.base': 'Phone number must be a valid 10-digit number.',
+      }),
+    emergencyContact: Joi.string()
+      .pattern(/^[0-9]{10}$/)
+      .required()
+      .messages({
+        'string.pattern.base': 'Emergency contact must be a valid 10-digit number.',
+      }),
+    role: Joi.string().default('user').valid('user', 'admin').messages({
+      'any.only': 'Role must be either user or admin.',
+    }),
+    language: Joi.string().valid('english', 'sinhala', 'tamil').required().messages({
+      'any.only': 'Language must be one of the allowed options (en, es, fr).',
+      'string.empty': 'Language is required.',
+    }),
+    securityQuestion: Joi.string().min(5).required().messages({
+      'string.empty': 'Security question is required.',
+      'string.min': 'Security question must be at least 5 characters long.',
+    }),
+    securityAnswer: Joi.string().min(3).required().messages({
+      'string.empty': 'Security answer is required.',
+      'string.min': 'Security answer must be at least 3 characters long.',
+    }),
+    captchaToken: Joi.string().required().messages({
+      'string.empty': 'CAPTCHA token is required.',
+    }),
+    
+  });
+  
+  module.exports = registerValidationSchema;
+  console.log(req.body);
+  const { error } = registerValidationSchema.validate(req.body, { abortEarly: false });
+
+  if (error) {
+    const errorMessages = error.details.map(detail => detail.message);
+    console.log(errorMessages);
+    return res.status(400).json({ message: 'Validation failed', errors: errorMessages });
+  }
   try {
     // Verify CAPTCHA
     const captchaVerification = await axios.post(

@@ -255,13 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>${message}</p>
 
         `;
-                    // Optionally hide the "close" button or add any additional styling if necessary
+                    
                     popup.classList.remove('hidden');
                 })
                 .catch(error => {
                     console.error('Error booking session:', error);
 
-                    // Display error message if available
                     if (error.response && error.response.data) {
                         alert(`Error: ${error.response.data.message}`);
                     } else {
