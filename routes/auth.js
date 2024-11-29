@@ -275,8 +275,31 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// Define Joi schema for validation
+const loginSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.empty': 'Email is required',
+    'string.email': 'Please enter a valid email address',
+  }),
+  password: Joi.string().min(6).required().messages({
+    'string.empty': 'Password is required',
+    'string.min': 'Password must be at least 6 characters long',
+  }),
+  captchaResponse: Joi.string().required().messages({
+    'string.empty': 'CAPTCHA response is required',
+  }),
+});
+
+//Login Route
 router.post('/login', async (req, res) => {
   const { email, password, captchaResponse } = req.body;
+
+  // Validate request body using Joi
+  const { error } = loginSchema.validate({ email, password, captchaResponse });
+
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
 
   // Verify CAPTCHA
   const secretKey = process.env.CAPTCHA_SECRET_KEY;
