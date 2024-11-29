@@ -376,8 +376,22 @@ router.post('/login', async (req, res) => {
                           <li><strong>IP Address:</strong> ${user.ipAddress || 'Unavailable'}</li>
                       </ul>
                   </div>
-                  <p>If this login activity was initiated by you, no further action is required. However, if you suspect any unauthorized access to your account, we recommend securing your account immediately by resetting your password. You can do so by clicking the link below:</p>
-                  <p>For any assistance or to report unusual activity, feel free to contact our support team at <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.</p>
+      
+                  <p>
+                      If this login activity was initiated by you, no further action is required. However, if you suspect any unauthorized access to your account, 
+                      we recommend securing your account immediately by resetting your password. You can do so by clicking the link below:
+                  </p>
+      
+                  <p style="text-align: center; margin: 20px 0;">
+                      <a href="${resetPasswordLink}" style="padding: 10px 20px; font-size: 16px; color: #fff; text-decoration: none; background-color: #007BFF; border-radius: 5px;">
+                          Reset Password
+                      </a>
+                  </p>
+      
+                  <p>For any assistance or to report unusual activity, feel free to contact our support team at 
+                      <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.
+                  </p>
+      
                   <p>Thank you for choosing Mental Wellness Helper. Your security is our priority.</p>
                   <p style="margin-top: 20px;">Best regards,<br><strong>The Mental Wellness Helper Team</strong></p>
                   <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
