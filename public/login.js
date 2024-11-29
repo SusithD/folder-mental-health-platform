@@ -1,8 +1,8 @@
 document.getElementById('loginForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
+    const email = sanitizeInput(document.getElementById('email').value.trim());
+    const password = sanitizeInput(document.getElementById('password').value.trim());
     const captchaResponse = grecaptcha.getResponse(); // Get the CAPTCHA response
 
     let isValid = true;
@@ -61,3 +61,18 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         alert('An error occurred. Please try again later.');
     }
 });
+
+/**
+ * Sanitizes input to remove potentially harmful characters.
+ * @param {string} input - The user input to sanitize.
+ * @returns {string} The sanitized input.
+ */
+function sanitizeInput(input) {
+    // Replace potentially harmful characters with their HTML entity equivalents
+    return input
+        .replace(/&/g, '&amp;')   // Replace & with &amp;
+        .replace(/</g, '&lt;')   // Replace < with &lt;
+        .replace(/>/g, '&gt;')   // Replace > with &gt;
+        .replace(/"/g, '&quot;') // Replace " with &quot;
+        .replace(/'/g, '&#39;'); // Replace ' with &#39;
+}
