@@ -67,12 +67,4 @@ document.getElementById('loginForm').addEventListener('submit', async function (
  * @param {string} input - The user input to sanitize.
  * @returns {string} The sanitized input.
  */
-function sanitizeInput(input) {
-    // Replace potentially harmful characters with their HTML entity equivalents
-    return input
-        .replace(/&/g, '&amp;')   // Replace & with &amp;
-        .replace(/</g, '&lt;')   // Replace < with &lt;
-        .replace(/>/g, '&gt;')   // Replace > with &gt;
-        .replace(/"/g, '&quot;') // Replace " with &quot;
-        .replace(/'/g, '&#39;'); // Replace ' with &#39;
-}
+

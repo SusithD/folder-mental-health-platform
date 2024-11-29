@@ -275,8 +275,29 @@ router.post('/register', async (req, res) => {
   }
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'Invalid email format',
+    'any.required': 'Email is required',
+  }),
+  password: Joi.string().min(6).required().messages({
+    'string.min': 'Password must be at least 6 characters',
+    'any.required': 'Password is required',
+  }),
+  captchaResponse: Joi.string().required().messages({
+    'any.required': 'CAPTCHA response is required',
+  }),
+});
+
+// Login Route
 router.post('/login', async (req, res) => {
   const { email, password, captchaResponse } = req.body;
+
+  // Validate input data using Joi
+  const { error } = loginSchema.validate({ email, password, captchaResponse });
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
 
   // Verify CAPTCHA
   const secretKey = process.env.CAPTCHA_SECRET_KEY;
@@ -328,7 +349,7 @@ router.post('/login', async (req, res) => {
           fullName: user.fullName,
         };
 
-        const token = jwt.sign(payload, 'your-secret-key', { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
         const transporter = nodemailer.createTransport({
           host: process.env.EMAIL_SERVICE,
@@ -347,9 +368,7 @@ router.post('/login', async (req, res) => {
           html: `
               <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                   <h2 style="color: #2c2c2c;">Hello ${user.fullName},</h2>
-      
                   <p>We noticed a successful login to your account on <strong>Mental Wellness Helper</strong>. For your reference, here are the details of the login:</p>
-      
                   <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
                       <ul style="list-style: none; padding: 0; margin: 0;">
                           <li><strong>Email:</strong> ${email}</li>
@@ -357,35 +376,15 @@ router.post('/login', async (req, res) => {
                           <li><strong>IP Address:</strong> ${user.ipAddress || 'Unavailable'}</li>
                       </ul>
                   </div>
-      
-                  <p>
-                      If this login activity was initiated by you, no further action is required. However, if you suspect any unauthorized access to your account, 
-                      we recommend securing your account immediately by resetting your password. You can do so by clicking the link below:
-                  </p>
-      
-                  <p style="text-align: center; margin: 20px 0;">
-                      <a href="${resetPasswordLink}" style="padding: 10px 20px; font-size: 16px; color: #fff; text-decoration: none; background-color: #007BFF; border-radius: 5px;">
-                          Reset Password
-                      </a>
-                  </p>
-      
-                  <p>For any assistance or to report unusual activity, feel free to contact our support team at 
-                      <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.
-                  </p>
-      
+                  <p>If this login activity was initiated by you, no further action is required. However, if you suspect any unauthorized access to your account, we recommend securing your account immediately by resetting your password. You can do so by clicking the link below:</p>
+                  <p>For any assistance or to report unusual activity, feel free to contact our support team at <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.</p>
                   <p>Thank you for choosing Mental Wellness Helper. Your security is our priority.</p>
-      
                   <p style="margin-top: 20px;">Best regards,<br><strong>The Mental Wellness Helper Team</strong></p>
-      
                   <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-                  <p style="font-size: 12px; color: #555;">
-                      This is an automated message. Please do not reply to this email. For inquiries, contact our support team at 
-                      <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.
-                  </p>
+                  <p style="font-size: 12px; color: #555;">This is an automated message. Please do not reply to this email. For inquiries, contact our support team at <a href="mailto:support@mentalwellnesshelper.com">support@mentalwellnesshelper.com</a>.</p>
               </div>
           `,
         };
-
 
         try {
           await transporter.sendMail(mailOptions);
@@ -402,106 +401,5 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-// Express route for forgot password - Get Security Question
-router.post('/forgot-password', (req, res) => {
-  const { email } = req.body;
-
-  // Query the database to get the user's security question
-  const query = 'SELECT securityQuestion FROM users WHERE email = ?';
-  db.query(query, [email], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Server error' });
-    }
-
-    if (result.length > 0) {
-      return res.json({ success: true, securityQuestion: result[0].securityQuestion });
-    } else {
-      return res.status(404).json({ message: 'User not found' });
-    }
-  });
-});
-
-
-// Express route for verifying security answer
-router.post('/verify-answer', (req, res) => {
-  const { email, securityAnswer } = req.body;
-
-  // Query the database to get the stored security answer
-  const query = 'SELECT securityAnswer FROM users WHERE email = ?';
-  db.query(query, [email], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Server error' });
-    }
-
-    if (result.length > 0 && result[0].securityAnswer === securityAnswer) {
-      return res.json({ success: true });
-    } else {
-      return res.status(400).json({ message: 'Incorrect answer' });
-    }
-  });
-});
-
-
-// Reset Password Route
-router.post('/reset-password', (req, res) => {
-  const { email, newPassword } = req.body;
-
-  // Hash the new password
-  bcrypt.hash(newPassword, 10, async (err, hashedPassword) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Server error' });
-    }
-
-    // Update the password in the database
-    const updateQuery = 'UPDATE users SET password = ? WHERE email = ?';
-    db.query(updateQuery, [hashedPassword, email], async (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error updating password' });
-      }
-
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-
-      // Send email notification about the password reset
-      try {
-        const transporter = nodemailer.createTransport({
-          host: process.env.EMAIL_SERVICE,
-          port: 587,
-          secure: false,
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-          },
-        });
-
-        const mailOptions = {
-          from: `"Mental Wellness Helper" <${process.env.EMAIL_USER}>`,
-          to: email,
-          subject: 'Your Password Has Been Reset',
-          text: `Hello,\n\nYour password has been successfully reset. If you did not request this change, please contact our support team immediately.\n\nBest Regards,\nThe Mental Wellness Helper Team`,
-          html: `
-            <p>Hello,</p>
-            <p>Your password has been successfully reset. If you did not request this change, please contact our support team immediately.</p>
-            <p>Best Regards,<br>The Mental Wellness Helper Team</p>
-          `,
-        };
-
-        await transporter.sendMail(mailOptions);
-        res.json({ success: true, message: 'Password reset successfully and email sent' });
-      } catch (emailError) {
-        console.error('Error sending email:', emailError);
-        res.json({ success: true, message: 'Password reset successfully but email notification failed' });
-      }
-    });
-  });
-});
-
-
 
 module.exports = router;
