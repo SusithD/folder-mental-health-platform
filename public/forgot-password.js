@@ -4,10 +4,11 @@ document.getElementById("forgotPasswordForm").addEventListener("submit", async f
     const email = document.getElementById("email").value;
     const securityAnswer = document.getElementById("securityAnswer") ? document.getElementById("securityAnswer").value : null;
     const newPassword = document.getElementById("newPassword") ? document.getElementById("newPassword").value : null;
+    const otp = document.getElementById("otp") ? document.getElementById("otp").value : null;
 
+    // Step 1: Submit Email to get the OTP
     if (document.getElementById("emailStep").style.display !== "none") {
-        // Step 1: Submit Email to get the security question
-        const response = await fetch("/forgot-password", {
+        const response = await fetch("/send-otp", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -17,14 +18,14 @@ document.getElementById("forgotPasswordForm").addEventListener("submit", async f
 
         const data = await response.json();
         if (data.success) {
-            // Show the security question
+            // Show the OTP input form
             document.getElementById("emailStep").style.display = "none";
-            document.getElementById("questionStep").style.display = "block";
-            document.getElementById("securityQuestionLabel").textContent = data.securityQuestion;
+            document.getElementById("otpStep").style.display = "block";
         } else {
             alert(data.message);
         }
     }
+
 
     if (document.getElementById("questionStep").style.display !== "none") {
         // Step 2: Verify the security answer
