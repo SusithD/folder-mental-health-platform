@@ -3,6 +3,17 @@
 # **Mental Health Platform**
 
 A comprehensive platform designed to support mental health care through tracking activities, offering resources, and providing professional assistance. This repository contains the codebase and documentation for the application.
+![Screenshot 2024-11-30 181050](https://github.com/user-attachments/assets/4e95f8d5-6601-408d-82e2-af1f17ce5efd)
+![Screenshot 2024-11-30 181057](https://github.com/user-attachments/assets/a72cd6b7-cb46-4bb8-b5bc-81f6b1879fb1)
+![Screenshot 2024-11-30 181103](https://github.com/user-attachments/assets/30a40c30-a850-427d-bf83-2e51cebf1bc9)
+![Screenshot 2024-11-30 181124](https://github.com/user-attachments/assets/5f9c66aa-ff50-4dfb-8a1a-aad7296608e6)
+![Screenshot 2024-11-30 181138](https://github.com/user-attachments/assets/ad36b207-9ccc-4b81-adcc-bfa1f0d206b2)
+![Screenshot 2024-11-30 181148](https://github.com/user-attachments/assets/5e3dbd3e-a9c4-418d-89ec-d4248681b496)
+![Screenshot 2024-11-30 181205](https://github.com/user-attachments/assets/bc1376a4-db66-4ca5-b8d3-66ee5684faf0)
+![Screenshot 2024-11-30 181214](https://github.com/user-attachments/assets/7500b8f4-d1c2-4514-bc29-4ffe66898bb4)
+![Screenshot 2024-11-30 181227](https://github.com/user-attachments/assets/bd9e2483-320e-48bb-a11f-95535303e87a)
+
+
 
 ---
 
@@ -12,11 +23,12 @@ A comprehensive platform designed to support mental health care through tracking
 2. [Features](#features)  
 3. [Technology Stack](#technology-stack)  
 4. [Database Design](#database-design)  
-5. [Setup and Installation](#setup-and-installation)  
-6. [API Endpoints](#api-endpoints)  
-7. [Usage](#usage)  
-8. [Contributing](#contributing)  
-9. [License](#license)
+5. [Security Practices](#security-practices)  
+6. [Setup and Installation](#setup-and-installation)  
+7. [API Endpoints](#api-endpoints)  
+8. [Usage](#usage)  
+9. [Contributing](#contributing)  
+10. [License](#license)
 
 ---
 
@@ -205,6 +217,41 @@ The database is designed to manage user activity, session bookings, mental healt
 
 ---
 
+## **Security Practices**
+
+The platform prioritizes user security with robust mechanisms at every level.
+
+### **Authentication & Authorization**
+- Passwords are salted and hashed using bcrypt.
+- CAPTCHA integration prevents brute force attacks.
+- Role-based access control ensures restricted access to sensitive data.
+
+### **Input Validation**
+- Data is validated on both client and server sides.
+- Inputs are sanitized to prevent XSS and injection attacks.
+- Special characters are escaped to avoid code execution vulnerabilities.
+
+### **Session Management**
+- Secure cookies marked as HttpOnly and Secure.
+- Sessions automatically expire after inactivity.
+- Token-based authentication (JWT) secures every request.
+
+### **Error Handling**
+- Generic error messages to prevent information leakage.
+- Secure error logging for internal debugging while maintaining user privacy.
+
+### **Database Security**
+- Principle of least privilege for database access.
+- Parameterized queries prevent SQL injection attacks.
+- Data encryption ensures secure storage and transfer.
+
+### **Continuous Testing**
+- Regular code analysis using tools like Snyk and SonarQube.
+- Automated security scans for early vulnerability detection.
+- Timely application of patches and updates.
+
+---
+
 ## **Setup and Installation**
 
 ### **Prerequisites**
@@ -302,5 +349,11 @@ We welcome contributions to enhance this platform!
 3. Commit your changes (`git commit -m "Add a feature"`).  
 4. Push to the branch (`git push origin feature-branch`).  
 5. Open a pull request.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ---
